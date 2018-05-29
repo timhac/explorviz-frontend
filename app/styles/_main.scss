@@ -97,3 +97,9 @@ body > .ember-view {
 .tooltip-component > a {
   color: #777;
 }
+
+//bootstrap overwrites
+
+.navbar-brand {
+  padding: 12px 15px;
+}
