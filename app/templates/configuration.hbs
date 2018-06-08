@@ -6,7 +6,22 @@
 <div class="tab-content">
   <div id="settings" class="tab-pane fade in active">
     <h3>General Settings</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <div class="panel-group pre-scrollable" id="generalconfigurationpanelgroup">
+      {{#each configurationService.generalSettingsTabs as |generalSettingTab|}}
+        <div class="panel panel-default">
+          <div data-toggle="collapse" data-target='#{{string-splitter generalSettingTab "/" 1}}' class="panel-heading container-shadow" style="cursor:pointer;">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href='#{{string-splitter generalSettingTab "/" 1}}'> {{string-splitter generalSettingTab "/" 1}} </a>
+            </h4>
+          </div>
+          <div id={{string-splitter generalSettingTab "/" 1}} class="panel-collapse collapse">
+            <div class="panel-body">
+              {{component generalSettingTab}}
+            </div>
+          </div>
+        </div>
+      {{/each}}      
+    </div>    
   </div>
   <div id="addons" class="tab-pane fade" style="height: 100%;">
     <h3>Addon Settings</h3>

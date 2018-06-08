@@ -20,6 +20,15 @@ export default Service.extend({
 
 
   /**
+  * Array for component-based settings dialogs. General setting components may be inserted
+  *
+  * @property generalSettingsTabs
+  * @type Array
+  */
+  generalSettingsTabs: null,
+
+
+  /**
   * Default colors for landscape visualization
   *
   * @property landscapeColors
@@ -61,6 +70,10 @@ export default Service.extend({
       clazz: "rgb(62,20,160)",
       highlightedEntity: "rgb(255,0,0)"
     });
+
+    this.set('generalSettingsTabs', [
+      "settings-tabs/user-management"
+    ]);
 
   }
 

@@ -15,11 +15,18 @@ export default JSONAPIAdapter.extend(DataAdapterMixin,{
  
   },
 
+  // @Override
+  urlForCreateRecord(modelName, snapshot) {
+    //return this._super(...arguments) + '/new';
+    const baseUrl = this.buildURL();
+    return `${baseUrl}`;
+  },
+
 
   // @Override
   urlForQueryRecord() {
     const baseUrl = this.buildURL();
-      return `${baseUrl}`;
+    return `${baseUrl}`;
   },
 
   //@Override

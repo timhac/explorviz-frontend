@@ -1,0 +1,40 @@
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h3>Create Single User</h3>
+    <form {{action 'createUser' on='submit'}} class="form center-block">
+    <table class="table table-striped">
+    <thead>
+        <tr>
+          <th class="col-xs-2">Attribute</th>
+          <th class="col-xs-10">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Name</b>{{help-tooltip title="Name of the to-be created user."}}</td>
+        <td>
+            {{input class="form-control" value=name}}
+        </td>
+      </tr>
+      <tr>
+        <td><b>Password</b>{{help-tooltip title="Password for the to-be created user."}}</td>
+        <td>
+            {{input class="form-control" value=password}}
+        </td>
+      </tr>
+      <tr>
+        <td><b>Role</b>{{help-tooltip title="Authorization role for the user. This attribute is used to decide, what users can see and use."}}</td>
+        <td>
+            {{input class="form-control" value=role}}
+        </td>
+      </tr>
+    </tbody>
+    </table>
+    <button class="btn btn-default">Create User</button>
+    </form>
+  </div>
+</div>
+
+
+
