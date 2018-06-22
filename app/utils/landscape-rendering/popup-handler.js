@@ -1,7 +1,7 @@
 import Object from '@ember/object';
 import Evented from '@ember/object/evented';
-import { encodeStringForPopUp } from '../helpers/string-helpers';
 import $ from 'jquery';
+import { encodeStringForPopUp } from '../helpers/string-helpers';
 
 export default Object.extend(Evented, {
 
@@ -10,44 +10,38 @@ export default Object.extend(Evented, {
 
 
   showTooltip(mouse, emberModel) {
-
-    if(!this.get('enableTooltips')) {
+    if (!this.get('enableTooltips')) {
       return;
     }
 
-    let content = this.buildContent(emberModel);
+    const content = this.buildContent(emberModel);
 
-    if(content.title === '' && content.html === '') {
+    if (content.title === '' && content.html === '') {
       return;
     }
 
-    $('#vizContainer').popover(
-      {
-        title: '<div style="font-weight:bold;text-align:center;">' +
-          content.title + '</div>',
-        content : content.html,
-        placement:'top',
-        trigger:'manual',
-        html:true
-      }
-    );
+    $('#vizContainer').popover({
+      title: `<div style="font-weight:bold;text-align:center;">${content.title}</div>`,
+      content: content.html,
+      placement: 'top',
+      trigger: 'manual',
+      html: true
+    });
 
     $('#vizContainer').popover('show');
 
     const topOffset = $('.popover').height() + 7;
     const leftOffset = $('.popover').width() / 2;
 
-    $('.popover').css('top', mouse.y - topOffset + 'px');
-    $('.popover').css('left', mouse.x - leftOffset + 'px');
+    $('.popover').css('top', `${(mouse.y - topOffset)}px`);
+    $('.popover').css('left', `${(mouse.x - leftOffset)}px`);
 
     this.set('alreadyDestroyed', false);
-
   },
 
 
   hideTooltip() {
-
-    if(!this.get('alreadyDestroyed')) {
+    if (!this.get('alreadyDestroyed')) {
       $('#vizContainer').popover('destroy');
       this.set('alreadyDestroyed', true);
     }
@@ -55,35 +49,29 @@ export default Object.extend(Evented, {
 
 
   buildContent(emberModel) {
-    let content = {title: '', html: ''};
+    let content = { title: '', html: '' };
 
     const modelType = emberModel.constructor.modelName;
 
     if (modelType === 'system') {
       content = buildSystemContent(emberModel);
-    }
-    else if (modelType === 'node') {
+    } else if (modelType === 'node') {
       content = buildNodeContent(emberModel);
-    }
-    else if (modelType === 'nodegroup') {
+    } else if (modelType === 'nodegroup') {
       content = buildNodegroupContent(emberModel);
-    }
-    else if (modelType === 'application') {
+    } else if (modelType === 'application') {
       content = buildApplicationContent(emberModel);
-    }
-    else if (modelType === 'applicationcommunication') {
+    } else if (modelType === 'applicationcommunication') {
       content = buildApplicationCommunicationContent(emberModel);
     }
 
     return content;
 
 
-
     // Helper functions
 
     function buildApplicationContent(application) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       content.title = encodeStringForPopUp(application.get('name'));
 
@@ -93,14 +81,12 @@ export default Object.extend(Evented, {
         '<table style="width:100%">' +
           '<tr>' +
             '<td>Last Usage:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              year +
+            `<td style="text-align:right;padding-left:10px;">${year}` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>Language:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              application.get('programmingLanguage') +
+            `<td style="text-align:right;padding-left:10px;">${application.get('programmingLanguage')}` +
             '</td>' +
           '</tr>' +
         '</table>';
@@ -110,8 +96,7 @@ export default Object.extend(Evented, {
 
 
     function buildSystemContent(system) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       content.title = encodeStringForPopUp(system.get('name'));
 
@@ -122,7 +107,6 @@ export default Object.extend(Evented, {
       const nodeGroups = system.get('nodegroups');
 
       nodeGroups.forEach((nodeGroup) => {
-
         nodesCount += nodeGroup.get('nodes').get('length');
 
         const nodes = nodeGroup.get('nodes');
@@ -130,7 +114,6 @@ export default Object.extend(Evented, {
         nodes.forEach((node) => {
           applicationCount += node.get('applications').get('length');
         });
-
       });
 
 
@@ -138,14 +121,12 @@ export default Object.extend(Evented, {
         '<table style="width:100%">' +
           '<tr>' +
             '<td>Nodes:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              nodesCount +
+            `<td style="text-align:right;padding-left:10px;">${nodesCount}` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>Applications:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              applicationCount +
+            `<td style="text-align:right;padding-left:10px;">${applicationCount}` +
             '</td>' +
           '</tr>' +
         '</table>';
@@ -154,40 +135,39 @@ export default Object.extend(Evented, {
     }
 
     function round(value, precision) {
-      var multiplier = Math.pow(10, precision || 0);
+      var multiplier = 10 ** (precision || 0);
       return Math.round(value * multiplier) / multiplier;
     }
 
     function buildNodeContent(node) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       content.title = node.getDisplayName();
 
       // Formatted values for the node popup
       const formatFactor = (1024 * 1024 * 1024);
       var cpuUtilization = round(node.get('cpuUtilization') * 100, 0);
-      var freeRAM =  round(node.get('freeRAM') / formatFactor, 2).toFixed(2);
-      var totalRAM =  round((node.get('usedRAM') + node.get('freeRAM')) / formatFactor, 2).toFixed(2);
+      var freeRAM = round(node.get('freeRAM') / formatFactor, 2).toFixed(2);
+      var totalRAM = round((node.get('usedRAM') + node.get('freeRAM')) / formatFactor, 2).toFixed(2);
 
       content.html =
         '<table style="width:100%">' +
           '<tr>' +
             '<td>CPU Utilization:</td>' +
             '<td style="text-align:right;padding-left:10px;">' +
-              cpuUtilization + ' %' +
+            `${cpuUtilization} %` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>Free RAM:</td>' +
             '<td style="text-align:right;padding-left:10px;">' +
-            freeRAM + ' GB' +
+            `${freeRAM} GB` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>Total RAM:</td>' +
               '<td style="text-align:right;padding-left:10px;">' +
-              totalRAM + ' GB' +
+              `${totalRAM} GB` +
             '</td>' +
           '</tr>' +
         '</table>';
@@ -197,8 +177,7 @@ export default Object.extend(Evented, {
 
 
     function buildNodegroupContent(nodeGroup) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       content.title = encodeStringForPopUp(nodeGroup.get('name'));
 
@@ -209,10 +188,8 @@ export default Object.extend(Evented, {
       const nodes = nodeGroup.get('nodes');
 
       nodes.forEach((node) => {
-
         avgNodeCPUUtil += node.get('cpuUtilization');
         applicationCount += node.get('applications').get('length');
-
       });
 
       var avgCpuUtilization = round((avgNodeCPUUtil * 100) / nodes.get('length'), 0);
@@ -221,20 +198,18 @@ export default Object.extend(Evented, {
         '<table style="width:100%">' +
           '<tr>' +
             '<td>Nodes:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              nodes.get('length') +
+            `<td style="text-align:right;padding-left:10px;">${nodes.get('length')}` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>Applications:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              applicationCount +
+            `<td style="text-align:right;padding-left:10px;">${applicationCount}` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>Avg. CPU Utilization:</td>' +
             '<td style="text-align:right;padding-left:10px;">' +
-              avgCpuUtilization + ' %' +
+            `${avgCpuUtilization} %` +
             '</td>' +
           '</tr>' +
         '</table>';
@@ -243,45 +218,37 @@ export default Object.extend(Evented, {
     }
 
 
-
     function buildApplicationCommunicationContent(applicationCommunication) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       const sourceApplicationName = applicationCommunication.get('sourceApplication').get('name');
       const targetApplicationName = applicationCommunication.get('targetApplication').get('name');
 
-      content.title = encodeStringForPopUp(sourceApplicationName) +
-        "&nbsp;<span class='glyphicon glyphicon-arrow-right'></span>&nbsp;" + encodeStringForPopUp(targetApplicationName);
+      content.title =
+        `${encodeStringForPopUp(sourceApplicationName)}&nbsp;<span class='glyphicon glyphicon-arrow-right'></span>&nbsp;${encodeStringForPopUp(targetApplicationName)}`;
 
       content.html =
         '<table style="width:100%">' +
           '<tr>' +
             '<td>&nbsp;<span class=\'glyphicon glyphicon-tasks\'></span>&nbsp; Requests:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              applicationCommunication.get('requests') +
+            `<td style="text-align:right;padding-left:10px;">${applicationCommunication.get('requests')}` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>&nbsp;<span class=\'glyphicon glyphicon-oil\'></span>&nbsp;Technology:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-              applicationCommunication.get('technology') +
+            `<td style="text-align:right;padding-left:10px;">${applicationCommunication.get('technology')}` +
             '</td>' +
           '</tr>' +
           '<tr>' +
             '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Duration:</td>' +
             '<td style="text-align:right;padding-left:10px;">' +
-              applicationCommunication.get('averageResponseTime') + ' ns' +
+            `${applicationCommunication.get('averageResponseTime')} ns` +
             '</td>' +
           '</tr>' +
         '</table>';
 
       return content;
     }
-
-
-
-
   } // END buildApplicationContent
 
 });

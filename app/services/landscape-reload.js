@@ -1,6 +1,6 @@
 import { inject as service } from '@ember/service';
-import Reload from './data-reload';
 import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
+import Reload from './data-reload';
 
 /**
 * This service reloads the latest-landscape every tenth second. See
@@ -12,7 +12,7 @@ import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 
 export default Reload.extend(AlertifyHandler, {
 
-  landscapeRepo: service("repos/landscape-repository"),
+  landscapeRepo: service('repos/landscape-repository'),
 
   // @Override
   /**
@@ -25,40 +25,37 @@ export default Reload.extend(AlertifyHandler, {
     this.set('shallReload', true);
   },
 
-
-
   // @Override
   /**
    * TODO
    *
    * @method updateObject
    */
-  updateObject(){
+  updateObject() {
     const self = this;
 
-    this.debug("start landscape-request");
-    this.get("store").queryRecord('landscape', 'latest-landscape')
+    this.debug('start landscape-request');
+    this.get('store').queryRecord('landscape', 'latest-landscape')
       .then(success, failure).catch(error);
 
-    //--------------inner functions--------------
-    function success(landscape){
-      self.debug("end landscape-request");
+    // --------------inner functions--------------
+    function success(landscape) {
+      self.debug('end landscape-request');
       self.set('landscapeRepo.latestLandscape', landscape);
       self.get('landscapeRepo').triggerUpdate();
     }
 
-    function failure(e){
-      self.showAlertifyMessage("Landscape couldn't be requested!" +
-        " Backend offline?");
-      self.debug("Landscape couldn't be requested!", e);
+    function failure(e) {
+      self.showAlertifyMessage('Landscape couldn\'t be requested!' +
+        ' Backend offline?');
+      self.debug('Landscape couldn\'t be requested!', e);
     }
 
 
-    function error(e){
-      self.debug("Error when fetching landscape: ", e);
+    function error(e) {
+      self.debug('Error when fetching landscape: ', e);
     }
-    //------------End of inner functions------------
-
+    // ------------End of inner functions------------
   }
 
 });

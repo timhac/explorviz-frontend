@@ -1,12 +1,11 @@
 import Object from '@ember/object';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 
 export default Object.extend({
 
-  centerPoint : null,
+  centerPoint: null,
 
   calculateAppCenterAndZZoom(emberApplication) {
-
     const MIN_X = 0;
     const MAX_X = 1;
     const MIN_Y = 2;
@@ -24,14 +23,15 @@ export default Object.extend({
     rect.push(foundation.get('positionZ'));
     rect.push(foundation.get('positionZ') + foundation.get('depth'));
 
-    //const SPACE_IN_PERCENT = 0.02;
+    // const SPACE_IN_PERCENT = 0.02;
 
-    const viewCenterPoint = new THREE.Vector3(rect.get(MIN_X) + 
-      ((rect.get(MAX_X) - rect.get(MIN_X)) / 2.0),
+    const viewCenterPoint = new THREE.Vector3(
+      rect.get(MIN_X) + ((rect.get(MAX_X) - rect.get(MIN_X)) / 2.0),
       rect.get(MIN_Y) + ((rect.get(MAX_Y) - rect.get(MIN_Y)) / 2.0),
-      rect.get(MIN_Z) + ((rect.get(MAX_Z) - rect.get(MIN_Z)) / 2.0));
+      rect.get(MIN_Z) + ((rect.get(MAX_Z) - rect.get(MIN_Z)) / 2.0)
+    );
 
-    /*let requiredWidth = Math.abs(rect.get(MAX_X) - rect.get(MIN_X));
+    /* let requiredWidth = Math.abs(rect.get(MAX_X) - rect.get(MIN_X));
     requiredWidth += requiredWidth * SPACE_IN_PERCENT;
 
     let requiredHeight = Math.abs(rect.get(MAX_Y) - rect.get(MIN_Y));
@@ -44,20 +44,19 @@ export default Object.extend({
     const newZ_by_width = requiredWidth / viewportRatio;
     const newZ_by_height = requiredHeight;
 
-    const center = new THREE.Vector3(rect.get(MIN_X) + ((rect.get(MAX_X) 
+    const center = new THREE.Vector3(rect.get(MIN_X) + ((rect.get(MAX_X)
     - rect.get(MIN_X)) / 2.0),
       rect.get(MIN_Y) + ((rect.get(MAX_Y) - rect.get(MIN_Y)) / 2.0), 0);
 
     const camera = self.get('camera');
 
-    camera.position.z = Math.max(Math.max(newZ_by_width, newZ_by_height), 
+    camera.position.z = Math.max(Math.max(newZ_by_width, newZ_by_height),
     10.0);
     camera.position.x = 0;
     camera.position.y = 0;
-    camera.updateProjectionMatrix();*/
+    camera.updateProjectionMatrix(); */
 
     this.set('centerPoint', viewCenterPoint);
-
   }
 
 });

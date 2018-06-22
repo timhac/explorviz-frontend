@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { inject as service } from "@ember/service";
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
 
@@ -12,19 +12,17 @@ export default Component.extend({
     focusEntity() {
       const searchResult = this.findElementByString(this.get('searchString'));
 
-      if(searchResult !== null) {
+      if (searchResult !== null) {
         this.get('renderingService').focusEntity();
       }
-
     },
 
-    openAllComponents(){
+    openAllComponents() {
       this.openAllComponents();
     }
   },
 
   findElementByString(searchString) {
-
     const possibleGlobalComponentCandidates = this.get('store')
       .peekAll('component')
       .filterBy('name', searchString);
@@ -39,22 +37,19 @@ export default Component.extend({
     // Retrieve the specific element of the currently visible latestApp
     const latestApp = this.get('landscapeRepo.latestApplication');
 
-    const firstMatch = possibleGlobalCandidates.find((candidate) => {
-      return latestApp.contains(candidate);
-    });
+    const firstMatch = possibleGlobalCandidates.find(candidate => latestApp.contains(candidate));
 
-    if(!firstMatch ||
+    if (!firstMatch ||
       this.get('highlighter.highlightedEntity') === firstMatch) {
       return;
     }
 
     const modelType = firstMatch.constructor.modelName;
 
-    if(modelType === "clazz") {
+    if (modelType === 'clazz') {
       firstMatch.openParents();
-    } 
-    else if(modelType === "component") {
-      if(firstMatch.get('opened')) {
+    } else if (modelType === 'component') {
+      if (firstMatch.get('opened')) {
         // close and highlight, since it is already open
         firstMatch.setOpenedStatus(false);
       } else {
@@ -62,18 +57,18 @@ export default Component.extend({
         firstMatch.openParents();
       }
     }
-    
+
     this.get('highlighter').highlight(firstMatch);
     this.get('renderingService').redrawScene();
   },
 
-  openAllComponents(){
+  openAllComponents() {
     const allClazzes = this.get('store').peekAll('clazz');
 
-    allClazzes.forEach(function(clazz){
-    clazz.openParents();
-        });
-     this.get('renderingService').redrawScene();
+    allClazzes.forEach(function (clazz) {
+      clazz.openParents();
+    });
+    this.get('renderingService').redrawScene();
   }
 
 });

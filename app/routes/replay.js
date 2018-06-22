@@ -1,12 +1,12 @@
-import BaseRoute from './base-route';
 import AuthenticatedRouteMixin from
- 'ember-simple-auth/mixins/authenticated-route-mixin';
+  'ember-simple-auth/mixins/authenticated-route-mixin';
 import { inject as service } from '@ember/service';
+import BaseRoute from './base-route';
 
 export default BaseRoute.extend(AuthenticatedRouteMixin, {
-  renderingService: service("rendering-service"),
-  reloadHandler: service("reload-handler"),
-  viewImporter: service("view-importer"),
+  renderingService: service('rendering-service'),
+  reloadHandler: service('reload-handler'),
+  viewImporter: service('view-importer'),
 
   actions: {
 

@@ -1,5 +1,5 @@
 import Object from '@ember/object';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 import { shortenString } from '../helpers/string-helpers';
 
 export default Object.extend({
@@ -15,28 +15,28 @@ export default Object.extend({
 
     this.set('labels', []);
 
-    this.set('textMaterialWhite', 
+    this.set(
+      'textMaterialWhite',
       new THREE.MeshBasicMaterial({
-        color : 0xffffff
+        color: 0xffffff
       })
     );
 
-    this.set('textMaterialBlack', 
+    this.set(
+      'textMaterialBlack',
       new THREE.MeshBasicMaterial({
-        color : 0x000000
+        color: 0x000000
       })
     );
-
   },
 
   createLabel(parentMesh, parentObject, font) {
-
     const bboxNew = new THREE.Box3().setFromObject(parentMesh);
 
     const worldParent = new THREE.Vector3();
     worldParent.setFromMatrixPosition(parentMesh.matrixWorld);
 
-    const oldLabel = this.get('labels').filter(function(label) {
+    const oldLabel = this.get('labels').filter(function (label) {
       const data = label.userData;
 
       return data.name === parentMesh.userData.name &&
@@ -46,43 +46,33 @@ export default Object.extend({
     // check if TextGeometry already exists
     if (oldLabel && oldLabel[0]) {
       parentObject.add(oldLabel[0]);
-      return;
-    }
-
-    // new TextGeometry necessary
-    else {
-
-      let fontSize = 2;
+    } else { // new TextGeometry necessary
+      const fontSize = 2;
 
       let labelString = parentMesh.userData.name;
 
-      if(parentMesh.userData.type === 'clazz' && labelString.length > 10){
+      if (parentMesh.userData.type === 'clazz' && labelString.length > 10) {
         labelString = shortenString(labelString);
       }
 
       var textGeo = new THREE.TextGeometry(labelString, {
-        font : font,
-        size : fontSize,
-        height : 0.1,
-        curveSegments : 1
+        font: font,
+        size: fontSize,
+        height: 0.1,
+        curveSegments: 1
       });
 
       // font color depending on parent object
       let material;
       if (parentMesh.userData.foundation) {
         material = this.get('textMaterialBlack');
-      }
-      else if (parentMesh.userData.type === 'package') {
+      } else if (parentMesh.userData.type === 'package') {
         material = this.get('textMaterialWhite');
-      }
-      // class
-      else {
+      } else { // class
         material = this.get('textMaterialWhite');
       }
 
       var mesh = new THREE.Mesh(textGeo, material);
-
-
 
       // calculate textWidth
       textGeo.computeBoundingBox();
@@ -99,9 +89,7 @@ export default Object.extend({
         // static scaling factor
         var j = 0.3;
         textGeo.scale(j, j, j);
-      }
-      // shrink the text if necessary to fit into the box
-      else {
+      } else { // shrink the text if necessary to fit into the box
         // upper scaling factor
         var i = 1.0;
         // until text fits into the parent bounding box
@@ -126,44 +114,38 @@ export default Object.extend({
       if (parentMesh.userData.opened) {
         mesh.position.x = bboxNew.min.x + 2;
         mesh.position.y = bboxNew.max.y;
-        mesh.position.z = (worldParent.z - Math.abs(centerX) / 2) - 2;
+        mesh.position.z = (worldParent.z - (Math.abs(centerX) / 2)) - 2;
         mesh.rotation.x = -(Math.PI / 2);
         mesh.rotation.z = -(Math.PI / 2);
+      } else if (parentMesh.userData.type === 'clazz') {
+        mesh.position.x = (worldParent.x - (Math.abs(centerX) / 2)) - 0.25;
+        mesh.position.y = bboxNew.max.y;
+        mesh.position.z = (worldParent.z - (Math.abs(centerX) / 2)) - 0.25;
+        mesh.rotation.x = -(Math.PI / 2);
+        mesh.rotation.z = -(Math.PI / 3);
       } else {
-        // TODO fix 'perfect' centering
-        if (parentMesh.userData.type === 'clazz') {
-          mesh.position.x = worldParent.x - Math.abs(centerX) / 2 - 0.25;
-          mesh.position.y = bboxNew.max.y;
-          mesh.position.z = (worldParent.z - Math
-              .abs(centerX) / 2) - 0.25;
-          mesh.rotation.x = -(Math.PI / 2);
-          mesh.rotation.z = -(Math.PI / 3);
-        } else {
-          mesh.position.x = worldParent.x - Math.abs(centerX) / 2;
-          mesh.position.y = bboxNew.max.y;
-          mesh.position.z = worldParent.z - Math.abs(centerX) / 2;
-          mesh.rotation.x = -(Math.PI / 2);
-          mesh.rotation.z = -(Math.PI / 4);
-        }
+        mesh.position.x = worldParent.x - (Math.abs(centerX) / 2);
+        mesh.position.y = bboxNew.max.y;
+        mesh.position.z = worldParent.z - (Math.abs(centerX) / 2);
+        mesh.rotation.x = -(Math.PI / 2);
+        mesh.rotation.z = -(Math.PI / 4);
       }
 
       // internal user-defined type
       mesh.userData = {
-        type : 'label',
-        name : parentMesh.userData.name,
-        parentPos : worldParent
+        type: 'label',
+        name: parentMesh.userData.name,
+        parentPos: worldParent
       };
 
       // add to scene
-      //self.combinedMeshes.push(mesh);
-      //mesh.add(mesh);
+      // self.combinedMeshes.push(mesh);
+      // mesh.add(mesh);
       this.get('labels').push(mesh);
       parentObject.add(mesh);
 
-      //return textMesh;
-
+      // return textMesh;
     }
-
   }
 
 });

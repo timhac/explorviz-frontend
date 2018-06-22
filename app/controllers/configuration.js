@@ -1,5 +1,5 @@
- import Controller from '@ember/controller';
- import {inject as service} from '@ember/service';
+import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
 
 /**
 * TODO
@@ -12,8 +12,8 @@
 */
 export default Controller.extend({
 
-  configurationService: service("configuration"),
-  renderingService: service("rendering-service"),
+  configurationService: service('configuration'),
+  renderingService: service('rendering-service'),
 
   hideTimeline() {
     this.set('renderingService.showTimeline', false);

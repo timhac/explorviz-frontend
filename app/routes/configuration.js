@@ -1,11 +1,11 @@
 import Route from '@ember/routing/route';
-import ApplicationRouteMixin from 
-'ember-simple-auth/mixins/application-route-mixin';
+import ApplicationRouteMixin from
+  'ember-simple-auth/mixins/application-route-mixin';
 
 
 /**
 * TODO
-* 
+*
 * @class Configuration-Route
 * @extends Ember.Route
 */

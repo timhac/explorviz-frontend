@@ -1,5 +1,5 @@
-import BaseEntity from './baseentity';
 import DS from 'ember-data';
+import BaseEntity from './baseentity';
 
 const { attr } = DS;
 
@@ -19,12 +19,12 @@ export default BaseEntity.extend({
   backgroundColor: attr(),
   highlighted: attr('boolean', { defaultValue: false }),
 
-  width: attr('number', { defaultValue: 0}),
-  height: attr('number', { defaultValue: 0}),
-  depth: attr('number', { defaultValue: 0}),
-  positionX: attr('number', { defaultValue: 0}),
-  positionY: attr('number', { defaultValue: 0}),
-  positionZ: attr('number', { defaultValue: 0}),
+  width: attr('number', { defaultValue: 0 }),
+  height: attr('number', { defaultValue: 0 }),
+  depth: attr('number', { defaultValue: 0 }),
+  positionX: attr('number', { defaultValue: 0 }),
+  positionY: attr('number', { defaultValue: 0 }),
+  positionZ: attr('number', { defaultValue: 0 }),
   threeJSModel: attr(),
 
   kielerGraphReference: null,

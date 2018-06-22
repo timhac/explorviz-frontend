@@ -15,11 +15,11 @@ export default Service.extend(Evented, {
 
   replayLandscape: null,
 
-  replayApplication:null,
+  replayApplication: null,
 
-  triggerUpdate(){
-    this.trigger("updated", this.get("latestLandscape"));
-    this.trigger("updated", this.get("replayLandscape"));
+  triggerUpdate() {
+    this.trigger('updated', this.get('latestLandscape'));
+    this.trigger('updated', this.get('replayLandscape'));
   }
 
 });

@@ -1,15 +1,15 @@
-import BaseModel from './base-model';
 import DS from 'ember-data';
+import BaseModel from './base-model';
 
 const { attr, hasMany } = DS;
 
 
 /**
-* Ember model for a Process. This model is used as an abstraction for 
-* distributed processes. 
-* 
+* Ember model for a Process. This model is used as an abstraction for
+* distributed processes.
+*
 * TODO more description
-* 
+*
 * @class Process-Model
 * @extends BaseModel
 *
@@ -18,9 +18,9 @@ const { attr, hasMany } = DS;
 */
 export default BaseModel.extend({
 
-  ip: attr("string"),
-  port: attr("string"),
+  ip: attr('string'),
+  port: attr('string'),
 
-  procezzes: hasMany("procezz")
+  procezzes: hasMany('procezz')
 
 });

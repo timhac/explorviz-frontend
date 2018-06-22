@@ -1,5 +1,5 @@
 import Object from '@ember/object';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 import { calculateColorBrightness } from '../helpers/threejs-helpers';
 
 export default Object.extend({
@@ -9,47 +9,41 @@ export default Object.extend({
   hoveredEntityColorObj: null,
 
   highlight(entity) {
-
     const isHighlighted = entity.get('highlighted');
 
     if (!isHighlighted) {
       this.get('application').unhighlight();
       entity.highlight();
       this.set('highlightedEntity', entity);
-    }
-    else {
+    } else {
       this.unhighlightAll();
     }
-
   },
 
 
   resetHoverEffect() {
-    if(this.get('hoveredEntityColorObj')) {
-
+    if (this.get('hoveredEntityColorObj')) {
       this.get('hoveredEntityColorObj').entity.material.color =
         this.get('hoveredEntityColorObj').color;
 
       this.set('hoveredEntityColorObj', null);
-
     }
   },
 
 
   handleHoverEffect(raycastTarget) {
-
     // no raycastTarget, do nothing and return
-    if(!raycastTarget) {
+    if (!raycastTarget) {
       this.resetHoverEffect();
-        return;
+      return;
     }
 
     const newHoverEntity = raycastTarget.object;
 
     // same object, do nothing and return
-    if(this.get('hoveredEntityColorObj') &&
+    if (this.get('hoveredEntityColorObj') &&
       this.get('hoveredEntityColorObj').entity === newHoverEntity) {
-        return;
+      return;
     }
 
     this.resetHoverEffect();
@@ -62,14 +56,11 @@ export default Object.extend({
     });
 
     newHoverEntity.material.color = calculateColorBrightness(oldColor, 1.1);
-
   },
 
 
   unhighlightAll() {
-
-    if(this.get('highlightedEntity')) {
-
+    if (this.get('highlightedEntity')) {
       this.set('highlightedEntity', null);
 
       if (this.get('application') !== null) {
@@ -80,7 +71,6 @@ export default Object.extend({
 
 
   applyHighlighting() {
-
     const highlightedNode = this.get('highlightedEntity');
 
     if (highlightedNode != null) {
@@ -90,12 +80,11 @@ export default Object.extend({
       outgoingClazzCommunications.forEach((clazzCommunication) => {
         if ((clazzCommunication.sourceClazz != null && clazzCommunication.get('sourceClazz').get('fullQualifiedName') === highlightedNode.get('fullQualifiedName')) ||
           (clazzCommunication.targetClazz != null && clazzCommunication.get('targetClazz').get('fullQualifiedName') === highlightedNode.get('fullQualifiedName'))) {
-            clazzCommunication.set("state", "NORMAL");
+          clazzCommunication.set('state', 'NORMAL');
         } else {
-          clazzCommunication.set("state", "TRANSPARENT");
+          clazzCommunication.set('state', 'TRANSPARENT');
         }
       });
-
     }
   }
 

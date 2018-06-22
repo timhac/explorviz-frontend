@@ -1,18 +1,18 @@
 import BaseRoute from 'explorviz-frontend/routes/base-route';
-import { on } from "@ember/object/evented";
-import { inject as service } from "@ember/service";
-import AuthenticatedRouteMixin from 
+import { on } from '@ember/object/evented';
+import { inject as service } from '@ember/service';
+import AuthenticatedRouteMixin from
   'ember-simple-auth/mixins/authenticated-route-mixin';
 
 
 export default BaseRoute.extend(AuthenticatedRouteMixin, {
 
-  agentReload: service("agent-reload"),
+  agentReload: service('agent-reload'),
 
   actions: {
     // @Override BaseRoute
     resetRoute() {
-      this.cleanupController();      
+      this.cleanupController();
     }
   },
 
@@ -28,12 +28,12 @@ export default BaseRoute.extend(AuthenticatedRouteMixin, {
     this.controller.set('agentForDetailView', null);
 
     // stop first, there might be an old service instance running
-    this.get("agentReload").stopUpdate();
-    this.get("agentReload").startUpdate();
+    this.get('agentReload').stopUpdate();
+    this.get('agentReload').startUpdate();
   },
 
 
-  setupProcessView: on('activate', function(){
+  setupProcessView: on('activate', function () {
     this.controllerFor('discovery').setup();
   })
 

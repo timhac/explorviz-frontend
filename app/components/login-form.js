@@ -1,9 +1,9 @@
-import { inject as service } from "@ember/service";
+import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 
 /**
 * TODO
-* 
+*
 * @class Login-Form-Component
 * @extends Ember.Component
 *
@@ -24,20 +24,19 @@ export default Component.extend({
      * @method authenticate
      */
     authenticate() {
-
       const self = this;
 
-      const { identification, password } = 
+      const { identification, password } =
         this.getProperties('identification', 'password');
 
       // reset (possible) old lables
-      if(this.get('session.session') && this.get('session.session.messages')) {
-        this.set('session.session.messages.message',"");
-        this.set('session.session.messages.errorMessage',"");
+      if (this.get('session.session') && this.get('session.session.messages')) {
+        this.set('session.session.messages.message', '');
+        this.set('session.session.messages.errorMessage', '');
       }
 
-      if(!this.checkForValidInput(identification, password)) {
-        const errorMessage = "Enter valid credentials.";
+      if (!this.checkForValidInput(identification, password)) {
+        const errorMessage = 'Enter valid credentials.';
         this.set('session.session.messages.errorMessage', errorMessage);
         return;
       }
@@ -54,34 +53,28 @@ export default Component.extend({
       }
 
       function failure(reason) {
-
         self.debug(reason);
 
-        const backendResponse = reason.errors[0];        
+        const backendResponse = reason.errors[0];
 
-        let errorMessage = "No connection to backend";
+        let errorMessage = 'No connection to backend';
 
         if (backendResponse && backendResponse.status && backendResponse.title &&
           backendResponse.detail) {
-
           errorMessage = `${backendResponse.status}: ${backendResponse.title} / 
             ${backendResponse.detail}`;
-
         }
 
         self.set('session.session.messages.errorMessage', errorMessage);
-
       }
-
     }
-
   },
 
   checkForValidInput(username, password) {
-    const usernameValid = username !== "" && username !== null && 
+    const usernameValid = username !== '' && username !== null &&
       username !== undefined;
 
-    const passwordValid = password !== "" && password !== null && 
+    const passwordValid = password !== '' && password !== null &&
       password !== undefined;
 
     return usernameValid && passwordValid;

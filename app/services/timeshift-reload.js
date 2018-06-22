@@ -1,7 +1,7 @@
-import Reload from './data-reload';
 import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
+import Reload from './data-reload';
 
 /**
 * This service fetches the timestamps every tenth second. In addition it
@@ -14,7 +14,7 @@ import { later } from '@ember/runloop';
 
 export default Reload.extend(AlertifyHandler, {
 
-	timestampRepo: service("repos/timestamp-repository"),
+  timestampRepo: service('repos/timestamp-repository'),
 
   // @Override
   /**
@@ -22,11 +22,10 @@ export default Reload.extend(AlertifyHandler, {
    *
    * @method init
    */
-	init() {
-		this._super(...arguments);
-		this.set('shallReload', true);
-	},
-
+  init() {
+    this._super(...arguments);
+    this.set('shallReload', true);
+  },
 
 
   // @Override
@@ -35,74 +34,72 @@ export default Reload.extend(AlertifyHandler, {
    *
    * @method updateObject
    */
-	updateObject(){
-		const self = this;
+  updateObject() {
+    const self = this;
 
-		this.debug("start timestamp-fetch");
-		this.get("store").query('timestamp', '1')
-			.then(success, failure).catch(error);
+    this.debug('start timestamp-fetch');
+    this.get('store').query('timestamp', '1')
+      .then(success, failure).catch(error);
 
-		//------------- Start of inner functions of updateObject ---------------
-		function success(timestamps){
-			self.set('timestampRepo.latestTimestamps', timestamps);
-			self.debug("end timestamp-fetch");
-		}
+    // ------------- Start of inner functions of updateObject ---------------
+    function success(timestamps) {
+      self.set('timestampRepo.latestTimestamps', timestamps);
+      self.debug('end timestamp-fetch');
+    }
 
-		function failure(e){
-			self.showAlertifyMessage("Timestamps couldn't be requested!" +
-        " Backend offline?");
-      self.debug("Timestamps couldn't be requested!", e);
-		}
+    function failure(e) {
+      self.showAlertifyMessage('Timestamps couldn\'t be requested!' +
+        ' Backend offline?');
+      self.debug('Timestamps couldn\'t be requested!', e);
+    }
 
-		function error(e){
-			this.debug(e);
-		}
+    function error(e) {
+      this.debug(e);
+    }
 
 
-		//------------- End of inner functions of getData ---------------
+    // ------------- End of inner functions of getData ---------------
+  },
 
-	},
+  // @override
+  reloadObjects() {
+    if (!this.get('shallReload')) {
+      return;
+    }
+    const self = this;
+    var timestamps = this.get('store').peekAll('timestamp').sortBy('id');
+    var oldestTimestamp = timestamps.get('firstObject');
 
-	//@override
-	reloadObjects(){
-		if(!this.get("shallReload")){
-			return;
-		}
-		const self = this;
-		var timestamps = this.get("store").peekAll("timestamp").sortBy("id");
-		var oldestTimestamp = timestamps.get("firstObject");
+    if (!oldestTimestamp) {
+      // if there is no Object, the service shall wait for a second, then reload
+      this.set('reloadThread', later(this, function () {
+        this.set('shallReload', true);
+      }, 1000));
+      return;
+    }
 
-		if(!oldestTimestamp){
-			//if there is no Object, the service shall wait for a second, then reload
-			this.set("reloadThread", later(this,
-				function(){
-					this.set("shallReload", true);
-				},1000));
-			return;
-		}
+    const id = oldestTimestamp.get('id');
+    var requestedTimestamps = this.get('store').query('timestamp', id);
+    requestedTimestamps.then(success, failure).catch(error);
 
-		const id = oldestTimestamp.get("id");
-		var requestedTimestamps = this.get("store").query('timestamp', id);
-		requestedTimestamps.then(success, failure).catch(error);
+    function success(timestamps) {
+      const length = timestamps.get('length');
+      if (length !== 0) {
+        timestamps.forEach(function (timestamp) {
+          self.get('store').push(timestamp.serialize({ includeId: true }));
+        });
+        self.startReload();
+      }
+    }
 
-		function success(timestamps){
-			const length = timestamps.get("length");
-			if(length !== 0){
-				timestamps.forEach(function(timestamp){
-					self.get("store").push(timestamp.serialize({includeId:true}));
-				});
-				self.startReload();
-			}
-		}
+    function failure(e) {
+      this.debug(e);
+    }
 
-		function failure(e){
-			this.debug(e);
-		}
-
-		function error(e){
-			this.debug(e);
-		}
-	},
+    function error(e) {
+      this.debug(e);
+    }
+  },
 
 
 });

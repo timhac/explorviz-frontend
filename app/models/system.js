@@ -1,6 +1,6 @@
-import DrawNodeEntity from './drawnodeentity';
-import { computed } from '@ember/object'; 
+import { computed } from '@ember/object';
 import DS from 'ember-data';
+import DrawNodeEntity from './drawnodeentity';
 
 const { attr, belongsTo, hasMany } = DS;
 
@@ -25,25 +25,24 @@ export default DrawNodeEntity.extend({
     inverse: 'systems'
   }),
 
-  opened: attr('boolean', {defaultValue: true}),
+  opened: attr('boolean', { defaultValue: true }),
 
   // used for text labeling performance in respective labelers
-  state: computed('opened', function() {
+  state: computed('opened', function () {
     return this.get('opened');
   }),
 
-  setOpened: function(openedParam) {
+  setOpened: function (openedParam) {
     if (openedParam) {
       this.get('nodegroups').forEach((nodegroup) => {
-          nodegroup.set('visible', true);
-          if (nodegroup.get('nodes').get('length') === 1) {
-            nodegroup.setOpened(true);
-          } else {
-            nodegroup.setOpened(false);
-          }
+        nodegroup.set('visible', true);
+        if (nodegroup.get('nodes').get('length') === 1) {
+          nodegroup.setOpened(true);
+        } else {
+          nodegroup.setOpened(false);
+        }
       });
-    }
-    else {
+    } else {
       this.get('nodegroups').forEach((nodegroup) => {
         nodegroup.set('visible', false);
         nodegroup.setAllChildrenVisibility(false);
@@ -51,6 +50,5 @@ export default DrawNodeEntity.extend({
     }
 
     this.set('opened', openedParam);
-
   }
 });

@@ -1,19 +1,20 @@
-import RenderingCore from './rendering-core';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
 
-import THREE from "npm:three";
+import THREE from 'npm:three';
 
 import applyCityLayout from
-    'explorviz-frontend/utils/application-rendering/city-layouter';
+  'explorviz-frontend/utils/application-rendering/city-layouter';
 import Interaction from
-    'explorviz-frontend/utils/application-rendering/interaction';
+  'explorviz-frontend/utils/application-rendering/interaction';
 import Labeler from
-    'explorviz-frontend/utils/application-rendering/labeler';
+  'explorviz-frontend/utils/application-rendering/labeler';
 import CalcCenterAndZoom from
-    'explorviz-frontend/utils/application-rendering/center-and-zoom-calculator';
+  'explorviz-frontend/utils/application-rendering/center-and-zoom-calculator';
 import FoundationBuilder from
-    'explorviz-frontend/utils/application-rendering/foundation-builder';
+  'explorviz-frontend/utils/application-rendering/foundation-builder';
+
+import RenderingCore from './rendering-core';
 
 
 /**
@@ -47,25 +48,25 @@ export default RenderingCore.extend({
   initRendering() {
     this._super(...arguments);
 
-    this.debug("init application rendering");
+    this.debug('init application rendering');
 
-    this.set('oldRotation', {x: 0, y: 0});
+    this.set('oldRotation', { x: 0, y: 0 });
 
-    this.onReSetupScene = function() {
+    this.onReSetupScene = function () {
       this.resetRotation();
       this.set('centerAndZoomCalculator.centerPoint', null);
       this.get('camera.position').set(0, 0, 100);
       this.cleanAndUpdateScene();
     };
 
-    this.onUpdated = function() {
-      if(this.get('initDone')) {
+    this.onUpdated = function () {
+      if (this.get('initDone')) {
         this.preProcessEntity();
         this.cleanAndUpdateScene();
       }
     };
 
-    this.onResized = function() {
+    this.onResized = function () {
       this.set('centerAndZoomCalculator.centerPoint', null);
       this.cleanAndUpdateScene();
     };
@@ -99,8 +100,7 @@ export default RenderingCore.extend({
     spotLight.castShadow = false;
     this.get('scene').add(spotLight);
 
-    const light = new THREE.AmbientLight(
-      new THREE.Color(0.65, 0.65, 0.65));
+    const light = new THREE.AmbientLight(new THREE.Color(0.65, 0.65, 0.65));
     this.scene.add(light);
 
     this.set('centerAndZoomCalculator.centerPoint', null);
@@ -110,7 +110,7 @@ export default RenderingCore.extend({
   cleanup() {
     this._super(...arguments);
 
-    this.debug("cleanup application rendering");
+    this.debug('cleanup application rendering');
 
     // remove foundation for re-rendering
     this.get('foundationBuilder').removeFoundation(this.get('store'));
@@ -134,7 +134,7 @@ export default RenderingCore.extend({
    * @method cleanAndUpdateScene
    */
   cleanAndUpdateScene() {
-    this.debug("clean application rendering");
+    this.debug('clean application rendering');
 
     // save old rotation
     this.set('oldRotation', this.get('application3D').rotation);
@@ -153,8 +153,7 @@ export default RenderingCore.extend({
    * @method preProcessEntity
    */
   preProcessEntity() {
-    const application = this.get('store').peekRecord('application',
-      this.get('applicationID'));
+    const application = this.get('store').peekRecord('application', this.get('applicationID'));
     this.set('landscapeRepo.latestApplication', application);
   },
 
@@ -167,12 +166,12 @@ export default RenderingCore.extend({
    */
   populateScene() {
     this._super(...arguments);
-    this.debug("populate application rendering");
+    this.debug('populate application rendering');
 
-    //const emberApplication = this.get('landscapeRepo.latestApplication');
+    // const emberApplication = this.get('landscapeRepo.latestApplication');
     const emberApplication = this.get('latestApplication');
 
-    if(!emberApplication) {
+    if (!emberApplication) {
       return;
     }
 
@@ -193,7 +192,7 @@ export default RenderingCore.extend({
     // apply (possible) highlighting
     this.get('interaction').applyHighlighting();
 
-    if(!this.get('centerAndZoomCalculator.centerPoint')) {
+    if (!this.get('centerAndZoomCalculator.centerPoint')) {
       this.get('centerAndZoomCalculator')
         .calculateAppCenterAndZZoom(emberApplication);
     }
@@ -213,24 +212,24 @@ export default RenderingCore.extend({
         end.multiplyScalar(0.5);
 
         // horizontal communication lines
-        /*if(start.y >= end.y) {
+        /* if(start.y >= end.y) {
           end.y = start.y;
         } else {
           start.y = end.y;
-        }*/
+        } */
 
         let transparent = false;
         let opacityValue = 1.0;
 
-        if(cumuClazzCommu.get('state') === "TRANSPARENT") {
+        if (cumuClazzCommu.get('state') === 'TRANSPARENT') {
           transparent = true;
           opacityValue = 0.4;
         }
 
         const material = new THREE.MeshBasicMaterial({
-          color : new THREE.Color(0xf49100),
-          opacity : opacityValue,
-          transparent : transparent
+          color: new THREE.Color(0xf49100),
+          opacity: opacityValue,
+          transparent: transparent
         });
 
         const thickness = cumuClazzCommu.get('lineThickness') * 0.3;
@@ -246,12 +245,11 @@ export default RenderingCore.extend({
 
     self.scene.add(self.get('application3D'));
 
-    if(self.get('initialSetupDone')) {
+    if (self.get('initialSetupDone')) {
       // apply old rotation
       self.set('application3D.rotation.x', self.get('oldRotation.x'));
       self.set('application3D.rotation.y', self.get('oldRotation.y'));
-    }
-    else {
+    } else {
       self.resetRotation();
       self.set('oldRotation.x', self.get('application3D').rotation.x);
       self.set('oldRotation.y', self.get('application3D').rotation.y);
@@ -264,10 +262,11 @@ export default RenderingCore.extend({
     const direction = new THREE.Vector3().subVectors(pointY, pointX);
     const orientation = new THREE.Matrix4();
     orientation.lookAt(pointX, pointY, new THREE.Object3D().up);
-    orientation.multiply(new THREE.Matrix4().set(1, 0, 0, 0, 0, 0, 1,
-      0, 0, -1, 0, 0, 0, 0, 0, 1));
-    const edgeGeometry = new THREE.CylinderGeometry(thickness, thickness,
-      direction.length(), 20, 1);
+    orientation.multiply(new THREE.Matrix4().set(1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1));
+    const edgeGeometry = new THREE.CylinderGeometry(
+      thickness, thickness,
+      direction.length(), 20, 1
+    );
     const pipe = new THREE.Mesh(edgeGeometry, material);
     pipe.applyMatrix(orientation);
 
@@ -278,7 +277,6 @@ export default RenderingCore.extend({
   },
 
   addComponentToScene(component, color) {
-
     const grey = 0xCECECE;
     const lightGreen = 0x00BB41;
     const darkGreen = 0x169E2B;
@@ -305,43 +303,36 @@ export default RenderingCore.extend({
     children.forEach((child) => {
       if (component.get('opened')) {
         if (child.get('opened')) {
-          if(child.get('highlighted')) {
+          if (child.get('highlighted')) {
             this.addComponentToScene(child, redHighlighted);
-          }
-          else if(component.get('color') === grey) {
+          } else if (component.get('color') === grey) {
             this.addComponentToScene(child, lightGreen);
-          }
-          else if(component.get('color') === darkGreen) {
+          } else if (component.get('color') === darkGreen) {
             this.addComponentToScene(child, lightGreen);
           } else {
             this.addComponentToScene(child, darkGreen);
           }
-        }
-        else {
-          if(child.get('highlighted')) {
-            this.addComponentToScene(child, redHighlighted);
-          }
-          else if(component.get('color') === grey) {
-            this.addComponentToScene(child, lightGreen);
-          }
-          else if(component.get('color') === darkGreen) {
-            this.addComponentToScene(child, lightGreen);
-          } else {
-            this.addComponentToScene(child, darkGreen);
-          }
+        } else if (child.get('highlighted')) {
+          this.addComponentToScene(child, redHighlighted);
+        } else if (component.get('color') === grey) {
+          this.addComponentToScene(child, lightGreen);
+        } else if (component.get('color') === darkGreen) {
+          this.addComponentToScene(child, lightGreen);
+        } else {
+          this.addComponentToScene(child, darkGreen);
         }
       }
     });
   }, // END addComponentToScene
 
 
-
   createBox(component, color, isClass) {
     const self = this;
-    let centerPoint = new THREE.Vector3(component.get('positionX') +
-      component.get('width') / 2.0, component.get('positionY') +
-      component.get('height') / 2.0,
-      component.get('positionZ') + component.get('depth') / 2.0);
+    const centerPoint = new THREE.Vector3(
+      component.get('positionX') + (component.get('width') / 2.0),
+      component.get('positionY') + (component.get('height') / 2.0),
+      component.get('positionZ') + (component.get('depth') / 2.0)
+    );
 
     const material = new THREE.MeshLambertMaterial();
     material.color = new THREE.Color(color);
@@ -350,8 +341,11 @@ export default RenderingCore.extend({
 
     centerPoint.multiplyScalar(0.5);
 
-    const extension = new THREE.Vector3(component.get('width') / 2.0,
-      component.get('height') / 2.0, component.get('depth') / 2.0);
+    const extension = new THREE.Vector3(
+      component.get('width') / 2.0,
+      component.get('height') / 2.0,
+      component.get('depth') / 2.0
+    );
 
     const cube = new THREE.BoxGeometry(extension.x, extension.y, extension.z);
 
@@ -367,12 +361,10 @@ export default RenderingCore.extend({
 
     mesh.userData.opened = component.get('opened');
 
-    self.get('labeler').createLabel(mesh, self.get('application3D'),
-      self.get('font'));
+    self.get('labeler').createLabel(mesh, self.get('application3D'), self.get('font'));
 
     self.get('application3D').add(mesh);
-
-  } ,// END createBox
+  }, // END createBox
 
 
   resetRotation() {
@@ -392,18 +384,12 @@ export default RenderingCore.extend({
     const webglrenderer = this.get('webglrenderer');
 
     // init interaction objects
-
-    this.get('interaction').setupInteraction(canvas, camera, webglrenderer,
-      this.get('application3D'));
+    this.get('interaction').setupInteraction(canvas, camera, webglrenderer, this.get('application3D'));
 
     // set listeners
-
-    this.get('renderingService').on('redrawScene', function() {
+    this.get('renderingService').on('redrawScene', function () {
       self.cleanAndUpdateScene();
     });
-
-
-
   }, // END initInteraction
 
 });

@@ -1,15 +1,15 @@
-import JSONAPI from "./jsonapi";
+import JSONAPI from './jsonapi';
 
 
 export default JSONAPI.extend({
 
-	modelName : "timestamp",
+  modelName: 'timestamp',
 
-	attributes: null,
+  attributes: null,
 
   init() {
     this._super(...arguments);
 
-    this.set('attributes', {timestamp: "number", calls: "number"});
+    this.set('attributes', { timestamp: 'number', calls: 'number' });
   }
 });

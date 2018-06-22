@@ -1,6 +1,6 @@
-import DrawNodeEntity from './drawnodeentity';
-import { computed } from '@ember/object'; 
+import { computed } from '@ember/object';
 import DS from 'ember-data';
+import DrawNodeEntity from './drawnodeentity';
 
 const { attr, belongsTo, hasMany } = DS;
 
@@ -25,18 +25,18 @@ export default DrawNodeEntity.extend({
     inverse: 'parent'
   }),
 
-  visible: attr('boolean', {defaultValue: true}),
-  opened: attr('boolean', {defaultValue: true}),
+  visible: attr('boolean', { defaultValue: true }),
+  opened: attr('boolean', { defaultValue: true }),
 
   // used for text labeling performance in respective renderers
-  state: computed('visible', 'opened', function() {
-    let opened = this.get('opened');
-    let visible = this.get('visible');
+  state: computed('visible', 'opened', function () {
+    const opened = this.get('opened');
+    const visible = this.get('visible');
     return `${opened}/${visible}`;
   }),
 
 
-  setOpened: function(openedParam) {
+  setOpened: function (openedParam) {
     if (openedParam) {
       this.setAllChildrenVisibility(true);
     } else {
@@ -51,9 +51,9 @@ export default DrawNodeEntity.extend({
   },
 
 
-  setAllChildrenVisibility: function(visiblity) {
+  setAllChildrenVisibility: function (visiblity) {
     this.get('nodes').forEach((node) => {
-          node.set('visible', visiblity);
+      node.set('visible', visiblity);
     });
   }
 

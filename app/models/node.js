@@ -1,6 +1,6 @@
-import DrawNodeEntity from './drawnodeentity';
-import { computed } from '@ember/object'; 
+import { computed } from '@ember/object';
 import DS from 'ember-data';
+import DrawNodeEntity from './drawnodeentity';
 
 const { attr, belongsTo, hasMany } = DS;
 
@@ -21,7 +21,7 @@ export default DrawNodeEntity.extend({
   freeRAM: attr('number'),
   usedRAM: attr('number'),
 
-  visible: attr('boolean', {defaultValue: true}),
+  visible: attr('boolean', { defaultValue: true }),
 
   applications: hasMany('application', {
     inverse: 'parent'
@@ -32,21 +32,19 @@ export default DrawNodeEntity.extend({
   }),
 
   // used for text labeling performance in respective labelers
-  state: computed('visible', function() {
-    let visible = this.get('visible');
+  state: computed('visible', function () {
+    const visible = this.get('visible');
     return `${visible}`;
   }),
 
-  getDisplayName: function() {
+  getDisplayName: function () {
     if (this.get('parent').get('opened')) {
-      if (this.get('name') && this.get('name').length > 0 && !this.get('name').startsWith("<")) {
+      if (this.get('name') && this.get('name').length > 0 && !this.get('name').startsWith('<')) {
         return this.get('name');
-      } else {
-        return this.get('ipAddress');
       }
-    } else {
-      return this.get('parent').get('name');
+      return this.get('ipAddress');
     }
+    return this.get('parent').get('name');
   }
 
 });

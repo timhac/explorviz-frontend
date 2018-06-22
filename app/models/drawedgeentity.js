@@ -1,5 +1,5 @@
-import BaseEntity from './baseentity';
 import DS from 'ember-data';
+import BaseEntity from './baseentity';
 
 const { attr } = DS;
 
@@ -22,7 +22,7 @@ export default BaseEntity.extend({
   * @property lineThickness
   * @type number
   */
-  lineThickness: attr('number', { defaultValue: 0.0}),
+  lineThickness: attr('number', { defaultValue: 0.0 }),
 
   /**
   * Z-position of this edge.
@@ -30,7 +30,7 @@ export default BaseEntity.extend({
   * @property positionZ
   * @type number
   */
-  positionZ: attr('number', { defaultValue: 0.0}),
+  positionZ: attr('number', { defaultValue: 0.0 }),
 
   /**
   * All points of the edge.

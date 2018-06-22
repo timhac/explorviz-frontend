@@ -1,6 +1,6 @@
-import Draw3DNodeEntity from './draw3dnodeentity';
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import Draw3DNodeEntity from './draw3dnodeentity';
 
 const { attr, belongsTo, hasMany } = DS;
 
@@ -18,8 +18,8 @@ export default Draw3DNodeEntity.extend({
   name: attr('string'),
   fullQualifiedName: attr('string'),
 
-  synthetic: attr('boolean', {defaultValue: false}),
-  foundation: attr('boolean', {defaultValue: false}),
+  synthetic: attr('boolean', { defaultValue: false }),
+  foundation: attr('boolean', { defaultValue: false }),
 
   children: hasMany('component', {
     inverse: 'parentComponent'
@@ -37,12 +37,11 @@ export default Draw3DNodeEntity.extend({
 
   // breaks Ember, maybe because of circle ?
 
-  /*belongingApplication: belongsTo('application', {
+  /* belongingApplication: belongsTo('application', {
     inverse: 'components'
-  }),*/
+  }), */
 
   setOpenedStatus(status) {
-
     this.get('children').forEach((child) => {
       child.set('highlighted', false);
       child.setOpenedStatus(false);
@@ -64,22 +63,21 @@ export default Draw3DNodeEntity.extend({
   },
 
   contains(possibleElem) {
-
     let found = false;
 
     this.get('clazzes').forEach((clazz) => {
-      if(clazz === possibleElem) {
+      if (clazz === possibleElem) {
         found = true;
       }
     });
 
-    if(!found) {
+    if (!found) {
       this.get('children').forEach((child) => {
-        if(child === possibleElem) {
+        if (child === possibleElem) {
           found = true;
         } else {
           const tempResult = child.contains(possibleElem);
-          if(tempResult) {
+          if (tempResult) {
             found = true;
           }
         }
@@ -87,13 +85,12 @@ export default Draw3DNodeEntity.extend({
     }
 
     return found;
-
   },
 
-  openParents: function() {
-    let parentModel = this.belongsTo('parentComponent').value();
+  openParents: function () {
+    const parentModel = this.belongsTo('parentComponent').value();
 
-    if(parentModel !== null) {
+    if (parentModel !== null) {
       parentModel.set('opened', true);
       parentModel.openParents();
     }
@@ -103,7 +100,7 @@ export default Draw3DNodeEntity.extend({
     const filteredComponents = [];
 
     this.get('children').forEach((component) => {
-      if(component.get(attributeString) === predicateValue) {
+      if (component.get(attributeString) === predicateValue) {
         filteredComponents.push(component);
       }
     });
@@ -111,7 +108,7 @@ export default Draw3DNodeEntity.extend({
     return filteredComponents;
   },
 
-  hasOnlyOneChildComponent: computed('children', function() {
+  hasOnlyOneChildComponent: computed('children', function () {
     return this.hasMany('children').ids().length < 2;
   }),
 

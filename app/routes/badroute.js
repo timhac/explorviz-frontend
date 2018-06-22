@@ -1,15 +1,15 @@
- import Route from '@ember/routing/route';
+import Route from '@ember/routing/route';
 
 /**
 * TODO
-* 
+*
 * @class Badroute-Route
 * @extends Ember.Route
 */
 export default Route.extend({
 
-  redirect : function(){
-        this.replaceWith("index");
-    }
+  redirect: function () {
+    this.replaceWith('index');
+  }
 
 });

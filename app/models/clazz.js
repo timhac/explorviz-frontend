@@ -16,7 +16,7 @@ export default Draw3DNodeEntity.extend({
 
   name: attr('string'),
   fullQualifiedName: attr('string'),
-  instanceCount: attr('number', {defaultValue: 0}),
+  instanceCount: attr('number', { defaultValue: 0 }),
   objectIds: attr(),
 
   outgoingClazzCommunications: hasMany('clazzcommunication', {
@@ -32,9 +32,9 @@ export default Draw3DNodeEntity.extend({
   },
 
   openParents() {
-    let parentModel = this.belongsTo('parent').value();
+    const parentModel = this.belongsTo('parent').value();
 
-    if(parentModel !== null) {
+    if (parentModel !== null) {
       parentModel.set('opened', true);
       parentModel.openParents();
     }

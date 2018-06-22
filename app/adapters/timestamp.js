@@ -2,8 +2,8 @@ import DS from 'ember-data';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import ENV from 'explorviz-frontend/config/environment';
 
-const {JSONAPIAdapter} = DS;
-const {APP} = ENV;
+const { JSONAPIAdapter } = DS;
+const { APP } = ENV;
 
 /**
 * This Adapter operates as communication abstraction for all network requests,
@@ -19,51 +19,45 @@ const {APP} = ENV;
 * @module explorviz
 * @submodule network
 */
-export default JSONAPIAdapter.extend(DataAdapterMixin,{
+export default JSONAPIAdapter.extend(DataAdapterMixin, {
 
   host: APP.API_ROOT,
-  namespace: "timestamp",
+  namespace: 'timestamp',
 
 
   init() {
-
     this.set('headers', {
-      "Accept": "application/vnd.api+json"
+      'Accept': 'application/vnd.api+json'
     });
- 
   },
 
   // @Override
   urlForQueryRecord(query) {
     const baseUrl = this.buildURL();
-    if(query === "1"){
+    if (query === '1') {
       return `${baseUrl}/from-recent?intervalSize=100`;
-    } else if(query === "2"){
-      //query all uploaded timestamps
+    } else if (query === '2') {
+      // query all uploaded timestamps
       return `${baseUrl}/all-uploaded`;
     }
-    else{
-      return `${baseUrl}/before-timestamp/${query}?intervalSize=100`;
-    }
+    return `${baseUrl}/before-timestamp/${query}?intervalSize=100`;
   },
 
 
   // @Override
   urlForQuery(query) {
     const baseUrl = this.buildURL();
-    if(query === "1"){
+    if (query === '1') {
       return `${baseUrl}/from-recent?intervalSize=100`;
-    }else if(query === "2"){
-      //query all uploaded timestamps
+    } else if (query === '2') {
+      // query all uploaded timestamps
       return `${baseUrl}/all-uploaded`;
     }
-    else{
-      return `${baseUrl}/before-timestamp/${query}?intervalSize=100`;
-    }
+    return `${baseUrl}/before-timestamp/${query}?intervalSize=100`;
   },
 
   authorize(xhr) {
-    let { access_token } = this.get('session.data.authenticated');
+    const { access_token } = this.get('session.data.authenticated');
     xhr.setRequestHeader('Authorization', `Basic ${access_token}`);
   }
 

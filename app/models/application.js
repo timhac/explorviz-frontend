@@ -24,7 +24,7 @@ export default DrawNodeEntity.extend({
 
   components: hasMany('component', {
     // breaks Ember, maybe because of circle ?
-    //inverse: 'belongingApplication'
+    // inverse: 'belongingApplication'
   }),
 
   databaseQueries: hasMany('databasequery'),
@@ -44,7 +44,7 @@ export default DrawNodeEntity.extend({
   }),
 
   // used for text labeling performance in respective renderers
-  state: "application",
+  state: 'application',
 
   unhighlight() {
     this.get('components').forEach((component) => {
@@ -66,7 +66,7 @@ export default DrawNodeEntity.extend({
     const filteredComponents = [];
 
     this.get('components').forEach((component) => {
-      if(component.get(attributeString) === predicateValue) {
+      if (component.get(attributeString) === predicateValue) {
         filteredComponents.push(component);
       }
     });

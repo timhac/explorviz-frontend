@@ -1,19 +1,19 @@
-import RenderingCore from './rendering-core';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
-import THREE from "npm:three";
+import THREE from 'npm:three';
 
 import applyKlayLayout from
- 'explorviz-frontend/utils/landscape-rendering/klay-layouter';
+  'explorviz-frontend/utils/landscape-rendering/klay-layouter';
 import Interaction from
- 'explorviz-frontend/utils/landscape-rendering/interaction';
+  'explorviz-frontend/utils/landscape-rendering/interaction';
 import Labeler from
- 'explorviz-frontend/utils/landscape-rendering/labeler';
+  'explorviz-frontend/utils/landscape-rendering/labeler';
 import CalcCenterAndZoom from
- 'explorviz-frontend/utils/landscape-rendering/center-and-zoom-calculator';
+  'explorviz-frontend/utils/landscape-rendering/center-and-zoom-calculator';
 
 import ImageLoader from 'explorviz-frontend/utils/three-image-loader';
 
+import RenderingCore from './rendering-core';
 
 
 /**
@@ -27,7 +27,7 @@ import ImageLoader from 'explorviz-frontend/utils/three-image-loader';
 */
 export default RenderingCore.extend({
 
-  configuration: service("configuration"),
+  configuration: service('configuration'),
 
   hammerManager: null,
 
@@ -48,21 +48,21 @@ export default RenderingCore.extend({
   initRendering() {
     this._super(...arguments);
 
-    this.debug("init landscape-rendering");
+    this.debug('init landscape-rendering');
 
-    this.onReSetupScene = function() {
+    this.onReSetupScene = function () {
       this.set('centerAndZoomCalculator.centerPoint', null);
       this.get('camera.position').set(0, 0, 0);
       this.cleanAndUpdateScene();
     };
 
-    this.onUpdated = function() {
-      if(this.get('initDone')) {
+    this.onUpdated = function () {
+      if (this.get('initDone')) {
         this.cleanAndUpdateScene();
       }
     };
 
-    this.onResized = function() {
+    this.onResized = function () {
       this.set('centerAndZoomCalculator.centerPoint', null);
       this.cleanAndUpdateScene();
     };
@@ -97,14 +97,13 @@ export default RenderingCore.extend({
     this.set('labeler.appTextCache', []);
 
     this.set('centerAndZoomCalculator.centerPoint', null);
-
   },
 
   // @Override
   cleanup() {
     this._super(...arguments);
 
-    this.debug("cleanup landscape rendering");
+    this.debug('cleanup landscape rendering');
 
     this.set('imageLoader.logos', {});
     this.set('labeler.textLabels', {});
@@ -126,7 +125,7 @@ export default RenderingCore.extend({
   cleanAndUpdateScene() {
     this._super(...arguments);
 
-    this.debug("clean and populate landscape-rendering");
+    this.debug('clean and populate landscape-rendering');
 
     this.set('interaction.raycastObjects', this.get('scene.children'));
   },
@@ -143,10 +142,10 @@ export default RenderingCore.extend({
 
     const self = this;
 
-    //const emberLandscape = this.get('landscapeRepo.latestLandscape');
+    // const emberLandscape = this.get('landscapeRepo.latestLandscape');
     const emberLandscape = this.get('latestLandscape');
 
-    if(!emberLandscape || !this.get('font')) {
+    if (!emberLandscape || !this.get('font')) {
       return;
     }
 
@@ -163,47 +162,47 @@ export default RenderingCore.extend({
 
 
     // create plus or minus, if not already done
-    if(!(this.get('openSymbol') && this.get('closeSymbol')) &&
+    if (!(this.get('openSymbol') && this.get('closeSymbol')) &&
       this.get('font')) {
-
       createCollapseSymbols();
-
     }
 
+    let centerPoint;
+
     if (systems) {
-
       // calculate new center and update zoom
-      if(!this.get('centerAndZoomCalculator.centerPoint')) {
+      if (!this.get('centerAndZoomCalculator.centerPoint')) {
         this.get('centerAndZoomCalculator')
-          .calculateLandscapeCenterAndZZoom(emberLandscape,
-            this.get('webglrenderer'));
+          .calculateLandscapeCenterAndZZoom(emberLandscape, this.get('webglrenderer'));
 
-        if(!this.get('viewImporter.importedURL')) {
+        if (!this.get('viewImporter.importedURL')) {
           const cameraZ = this.get('centerAndZoomCalculator.cameraZ');
           this.set('camera.position.z', cameraZ);
           this.get('camera').updateProjectionMatrix();
         }
-
       }
 
-      var centerPoint = this.get('centerAndZoomCalculator.centerPoint');
+      centerPoint = this.get('centerAndZoomCalculator.centerPoint');
 
       // Draw boxes for systems
-      systems.forEach(function(system) {
+      systems.forEach(function (system) {
+        var extensionX;
+        var extensionY;
+        var centerX;
+        var centerY;
 
         isRequestObject = false;
 
-        if (!isRequestObject && system.get('name') === "Requests") {
+        if (!isRequestObject && system.get('name') === 'Requests') {
           isRequestObject = true;
         }
 
         if (!isRequestObject) {
+          extensionX = system.get('width') * scaleFactor.width;
+          extensionY = system.get('height') * scaleFactor.height;
 
-          var extensionX = system.get('width') * scaleFactor.width;
-          var extensionY = system.get('height') * scaleFactor.height;
-
-          var centerX = system.get('positionX') + extensionX - centerPoint.x;
-          var centerY = system.get('positionY') - extensionY - centerPoint.y;
+          centerX = (system.get('positionX') + extensionX) - centerPoint.x;
+          centerY = (system.get('positionY') - extensionY) - centerPoint.y;
 
           var systemMesh = createPlane(system);
           systemMesh.position.set(centerX, centerY, system.get('positionZ'));
@@ -221,24 +220,20 @@ export default RenderingCore.extend({
 
           let collapseSymbol = null;
 
-          if(system.get('opened')) {
-            if(self.get('closeSymbol')) {
+          if (system.get('opened')) {
+            if (self.get('closeSymbol')) {
               collapseSymbol = self.get('closeSymbol').clone();
             }
-          } else {
-            if(self.get('openSymbol')) {
-              collapseSymbol = self.get('openSymbol').clone();
-            }
+          } else if (self.get('openSymbol')) {
+            collapseSymbol = self.get('openSymbol').clone();
           }
 
-          if(collapseSymbol) {
+          if (collapseSymbol) {
             collapseSymbol.position.x = bboxSystem.max.x - 0.35;
             collapseSymbol.position.y = bboxSystem.max.y - 0.35;
             collapseSymbol.position.z = systemMesh.position.z + 0.0001;
             systemMesh.add(collapseSymbol);
           }
-
-
         }
 
         const nodegroups = system.get('nodegroups');
@@ -246,23 +241,20 @@ export default RenderingCore.extend({
         var nodegroupMesh;
 
         // Draw boxes for nodegroups
-        nodegroups.forEach(function(nodegroup) {
-
-          if(!nodegroup.get('visible')) {
-              return;
+        nodegroups.forEach(function (nodegroup) {
+          if (!nodegroup.get('visible')) {
+            return;
           }
 
           if (!isRequestObject) {
-
             extensionX = nodegroup.get('width') * scaleFactor.width;
             extensionY = nodegroup.get('height') * scaleFactor.height;
 
-            centerX = nodegroup.get('positionX') + extensionX - centerPoint.x;
-            centerY = nodegroup.get('positionY') - extensionY - centerPoint.y;
+            centerX = (nodegroup.get('positionX') + extensionX) - centerPoint.x;
+            centerY = (nodegroup.get('positionY') - extensionY) - centerPoint.y;
 
             nodegroupMesh = createPlane(nodegroup);
-            nodegroupMesh.position.set(centerX, centerY,
-              nodegroup.get('positionZ') + 0.001);
+            nodegroupMesh.position.set(centerX, centerY, nodegroup.get('positionZ') + 0.001);
 
             // add respective open / close symbol
             nodegroupMesh.geometry.computeBoundingBox();
@@ -270,17 +262,15 @@ export default RenderingCore.extend({
 
             let collapseSymbol = null;
 
-            if(nodegroup.get('opened')) {
-              if(self.get('closeSymbol')) {
+            if (nodegroup.get('opened')) {
+              if (self.get('closeSymbol')) {
                 collapseSymbol = self.get('closeSymbol').clone();
               }
-            } else {
-              if(self.get('openSymbol')) {
-                collapseSymbol = self.get('openSymbol').clone();
-              }
+            } else if (self.get('openSymbol')) {
+              collapseSymbol = self.get('openSymbol').clone();
             }
 
-            if(collapseSymbol) {
+            if (collapseSymbol) {
               collapseSymbol.position.x = bboxNodegroup.max.x - 0.35;
               collapseSymbol.position.y = bboxNodegroup.max.y - 0.35;
               collapseSymbol.position.z = nodegroupMesh.position.z + 0.0001;
@@ -291,55 +281,49 @@ export default RenderingCore.extend({
           const nodes = nodegroup.get('nodes');
 
           // Add box for nodegroup if it contains more than one node
-          if(nodes.content.length > 1){
+          if (nodes.content.length > 1) {
             self.get('scene').add(nodegroupMesh);
             nodegroup.set('threeJSModel', nodegroupMesh);
           }
 
           // Draw boxes for nodes
-          nodes.forEach(function(node) {
-
-            if(!node.get('visible')) {
+          nodes.forEach(function (node) {
+            if (!node.get('visible')) {
               return;
             }
 
-            if (!isRequestObject) {
+            let nodeMesh;
 
+            if (!isRequestObject) {
               extensionX = node.get('width') * scaleFactor.width;
               extensionY = node.get('height') * scaleFactor.height;
 
-              centerX = node.get('positionX') + extensionX - centerPoint.x;
-              centerY = node.get('positionY') - extensionY - centerPoint.y;
+              centerX = (node.get('positionX') + extensionX) - centerPoint.x;
+              centerY = (node.get('positionY') - extensionY) - centerPoint.y;
 
-              var nodeMesh = createPlane(node);
+              nodeMesh = createPlane(node);
               nodeMesh.position.set(centerX, centerY, node.get('positionZ') +
                 0.002);
 
               self.get('scene').add(nodeMesh);
               node.set('threeJSModel', nodeMesh);
-
             }
 
             const applications = node.get('applications');
 
             // Draw boxes for applications
-            applications.forEach(function(application) {
-
+            applications.forEach(function (application) {
               extensionX = application.get('width') * scaleFactor.width;
               extensionY = application.get('height') * scaleFactor.width;
 
-              centerX = application.get('positionX') + extensionX -
-                centerPoint.x;
+              centerX = (application.get('positionX') + extensionX) - centerPoint.x;
 
-              centerY = application.get('positionY') - extensionY -
-                centerPoint.y;
+              centerY = (application.get('positionY') - extensionY) - centerPoint.y;
 
               if (!isRequestObject) {
-
                 var applicationMesh = createPlane(application);
 
-                applicationMesh.position.set(centerX, centerY,
-                  application.get('positionZ') + 0.003);
+                applicationMesh.position.set(centerX, centerY, application.get('positionZ') + 0.003);
 
                 self.get('scene').add(applicationMesh);
                 application.set('threeJSModel', applicationMesh);
@@ -368,34 +352,31 @@ export default RenderingCore.extend({
                   'database2' : application.get('programmingLanguage')
                     .toLowerCase();
 
-                self.get('imageLoader').createPicture(logoPos.x, logoPos.y,
+                self.get('imageLoader').createPicture(
+                  logoPos.x, logoPos.y,
                   logoPos.z, logoSize.width, logoSize.height,
-                  texturePartialPath, applicationMesh, "label");
+                  texturePartialPath, applicationMesh, 'label'
+                );
 
                 // create text labels
 
                 let textColor =
                   self.get('configuration.landscapeColors.textapp');
 
-                self.get('labeler').saveTextForLabeling(null, applicationMesh,
-                  textColor);
+                self.get('labeler').saveTextForLabeling(null, applicationMesh, textColor);
 
                 textColor = self.get('configuration.landscapeColors.textnode');
-                self.get('labeler').saveTextForLabeling(node.getDisplayName(),
-                  nodeMesh, textColor);
-
+                self.get('labeler').saveTextForLabeling(node.getDisplayName(), nodeMesh, textColor);
               } else {
                 // draw request logo
-                self.get('imageLoader').createPicture((centerX + 0.47), centerY, 0,
-                  1.6, 1.6, "requests", self.get('scene'), "label");
+                self.get('imageLoader').createPicture(
+                  (centerX + 0.47), centerY, 0,
+                  1.6, 1.6, 'requests', self.get('scene'), 'label'
+                );
               }
-
             });
-
           });
-
         });
-
       });
     } // END if(systems)
 
@@ -408,21 +389,17 @@ export default RenderingCore.extend({
     let tile;
 
     if (appCommunications) {
-
       const color = self.get('configuration.landscapeColors.communication');
 
       appCommunications.forEach((applicationCommunication) => {
-
         const points = applicationCommunication.get('points');
 
         if (points.length > 0) {
-
           for (var i = 1; i < points.length; i++) {
-
             const lastPoint = points[i - 1];
             const thisPoint = points[i];
 
-            let tileWay = {
+            const tileWay = {
               startPoint: lastPoint,
               endPoint: thisPoint
             };
@@ -430,10 +407,9 @@ export default RenderingCore.extend({
             let id = tiles.findIndex(isSameTile, tileWay);
 
 
-            if(id !== -1){
+            if (id !== -1) {
               tile = tiles[id];
-            }
-            else{
+            } else {
               id = tiles.length; // Gets a new index
 
               tile = {
@@ -449,26 +425,20 @@ export default RenderingCore.extend({
             }
 
             tile.communications.push(appCommunications);
-            tile.requestsCache = tile.requestsCache +
-              applicationCommunication.get('requests');
+            tile.requestsCache += applicationCommunication.get('requests');
 
             tiles[id] = tile;
           }
-
         }
-
       });
 
-
       addCommunicationLineDrawing(tiles, self.get('scene'));
-
     }
 
 
     // Helper functions //
 
     function createCollapseSymbols() {
-
       const material = new THREE.MeshBasicMaterial({
         color: self.get('configuration.landscapeColors.collapseSymbol')
       });
@@ -476,7 +446,7 @@ export default RenderingCore.extend({
 
       // plus symbol
 
-      const labelGeoOpen = new THREE.TextBufferGeometry("+", {
+      const labelGeoOpen = new THREE.TextBufferGeometry('+', {
         font: self.get('font'),
         size: 0.35,
         height: 0
@@ -487,7 +457,7 @@ export default RenderingCore.extend({
 
       // minus symbol
 
-      const labelGeoClose = new THREE.TextBufferGeometry("-", {
+      const labelGeoClose = new THREE.TextBufferGeometry('-', {
         font: self.get('font'),
         size: 0.35,
         height: 0
@@ -498,7 +468,7 @@ export default RenderingCore.extend({
     }
 
     // This function is only neccessary to find the right index
-    function isSameTile(tile){
+    function isSameTile(tile) {
       return checkEqualityOfPoints(this.endPoint, tile.endPoint) &&
         checkEqualityOfPoints(this.startPoint, tile.startPoint);
     }
@@ -510,7 +480,6 @@ export default RenderingCore.extend({
     */
 
     function addCommunicationLineDrawing(tiles, parent) {
-
       const requestsList = {};
 
       tiles.forEach((tile) => {
@@ -520,18 +489,16 @@ export default RenderingCore.extend({
       const categories = getCategories(requestsList, true);
 
       for (let i = 0; i < tiles.length; i++) {
-        let tile = tiles[i];
-        tile.lineThickness = 0.7 * categories[tile.requestsCache] + 0.1;
+        const tile = tiles[i];
+        tile.lineThickness = (0.7 * categories[tile.requestsCache]) + 0.1;
         createLine(tile, tiles, parent);
       }
 
 
       function getCategories(list, linear) {
-
         if (linear) {
           useLinear(list);
-        }
-        else {
+        } else {
           useThreshholds(list);
         }
 
@@ -541,10 +508,12 @@ export default RenderingCore.extend({
 
         function useThreshholds(list) {
           let max = 1;
+          const requests = Object.keys(list);
 
-          for(let request in list) {
+          for (let i = 0; i < requests.length; i++) {
+            let request = requests[i];
             request = parseInt(request);
-      max = (request > max) ? request : max;
+            max = (request > max) ? request : max;
           }
 
           const oneStep = max / 3.0;
@@ -552,16 +521,16 @@ export default RenderingCore.extend({
           const t1 = oneStep;
           const t2 = oneStep * 2;
 
-          for(let request in list){
-            let categoryValue = getCategoryFromValues(request, t1, t2);
+          for (let i = 0; i < requests.length; i++) {
+            const request = requests[i];
+            const categoryValue = getCategoryFromValues(request, t1, t2);
             list[request] = categoryValue;
           }
-
         }
 
 
         function getCategoryFromValues(value, t1, t2) {
-      value = parseInt(value);
+          value = parseInt(value);
           if (value === 0) {
             return 0.0;
           } else if (value === 1) {
@@ -572,12 +541,11 @@ export default RenderingCore.extend({
             return 2.0;
           } else if (value <= t2) {
             return 3.0;
-          } else {
-            return 4.0;
           }
+          return 4.0;
         }
 
-/*
+        /*
         function useLinear(list) {
           let max = 1;
           let secondMax = 1;
@@ -620,51 +588,53 @@ export default RenderingCore.extend({
 
         function useLinear(list) {
           let max = 1;
+          const requests = Object.keys(list);
 
-          for(let request in list){
+          for (let i = 0; i < requests.length; i++) {
+            let request = requests[i];
             request = parseInt(request);
-              max = (request > max) ? request: max;
+            max = (request > max) ? request : max;
           }
 
-         for(let requests in list){
-           let help = parseInt(requests);
-            list[requests] = help/max;
+          for (let i = 0; i < requests.length; i++) {
+            const request = requests[i];
+            const help = parseInt(request);
+            list[request] = help / max;
           }
-
         }
-
       } // END getCategories
-
     } // END addCommunicationLineDrawing
 
 
     function checkEqualityOfPoints(p1, p2) {
-      let x = Math.abs(p1.x - p2.x) <= 0.01;
-      let y = Math.abs(p1.y - p2.y) <= 0.01;
+      const x = Math.abs(p1.x - p2.x) <= 0.01;
+      const y = Math.abs(p1.y - p2.y) <= 0.01;
 
       return (x && y);
     }
 
 
-
     function createLine(tile, tiles, parent) {
-
-      let firstVector = new THREE.Vector3(tile.startPoint.x - centerPoint.x,
-        tile.startPoint.y - centerPoint.y, tile.positionZ);
-      let secondVector = new THREE.Vector3(tile.endPoint.x - centerPoint.x,
-          tile.endPoint.y - centerPoint.y, tile.positionZ);
+      const firstVector = new THREE.Vector3(
+        tile.startPoint.x - centerPoint.x,
+        tile.startPoint.y - centerPoint.y,
+        tile.positionZ
+      );
+      const secondVector = new THREE.Vector3(
+        tile.endPoint.x - centerPoint.x,
+        tile.endPoint.y - centerPoint.y,
+        tile.positionZ
+      );
 
       // New line approach (draw planes)
 
       // Euclidean distance
-      const lengthPlane = Math.sqrt(
-        Math.pow((firstVector.x - secondVector.x),2) +
-        Math.pow((firstVector.y - secondVector.y),2));
+      const lengthPlane = Math.sqrt(((firstVector.x - secondVector.x) ** 2) +
+        ((firstVector.y - secondVector.y) ** 2));
 
-      const geometryPlane = new THREE.PlaneGeometry(lengthPlane,
-        tile.lineThickness * 0.4);
+      const geometryPlane = new THREE.PlaneGeometry(lengthPlane, tile.lineThickness * 0.4);
 
-      const materialPlane = new THREE.MeshBasicMaterial({color: tile.pipeColor});
+      const materialPlane = new THREE.MeshBasicMaterial({ color: tile.pipeColor });
       const plane = new THREE.Mesh(geometryPlane, materialPlane);
 
       let isDiagonalPlane = false;
@@ -689,17 +659,16 @@ export default RenderingCore.extend({
         const posZ = firstVector.z;
 
         plane.position.set(posX, posY, posZ);
-      }
-      else {
+      } else {
         plane.position.copy(diagonalPos);
       }
 
-      plane.userData['model'] = tile.emberModel;
+      plane.userData.model = tile.emberModel;
 
       parent.add(plane);
 
 
-      //----------Helper functions
+      // ----------Helper functions
       /*
       function createGoodEdges(firstTile, secondTile, parent){
 
@@ -742,35 +711,30 @@ export default RenderingCore.extend({
 
         parent.add(lineMesh);
 
-      }*/
-
+      } */
     } // END createLine
 
 
     function createPlane(model) {
-
       const emberModelName = model.constructor.modelName;
 
       const material = new THREE.MeshBasicMaterial({
-        color: self.get('configuration.landscapeColors.' + emberModelName)
+        color: self.get(`configuration.landscapeColors.${emberModelName}`)
       });
 
-      const plane = new THREE.Mesh(new THREE.PlaneGeometry(model.get('width'),
-        model.get('height')), material);
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(model.get('width'), model.get('height')),
+        material
+      );
 
-      plane.userData['model'] = model;
+      plane.userData.model = model;
       return plane;
-
     }
 
-    this.get('labeler').drawTextLabels(self.get('font'),
-      self.get('configuration'));
-
-
+    this.get('labeler').drawTextLabels(self.get('font'), self.get('configuration'));
   }, // END populateScene
 
   initInteraction() {
-
     const self = this;
 
     const canvas = this.get('canvas');
@@ -780,45 +744,33 @@ export default RenderingCore.extend({
 
     // init interaction objects
 
-    this.get('interaction').setupInteraction(canvas, camera, webglrenderer,
-      raycastObjects);
+    this.get('interaction').setupInteraction(canvas, camera, webglrenderer, raycastObjects);
 
     // set listeners
 
-    this.get('interaction').on('redrawScene', function() {
+    this.get('interaction').on('redrawScene', function () {
       self.cleanAndUpdateScene();
     });
 
-    this.get('interaction').on('showApplication', function(emberModel) {
+    this.get('interaction').on('showApplication', function (emberModel) {
       self.set('viewImporter.importedURL', null);
       self.set('landscapeRepo.latestApplication', emberModel);
       self.set('landscapeRepo.replayApplication', emberModel);
     });
-
-
-
   }, // END initInteraction
 
 
   // ONLY FOR DEBUGGIN
   debugPlane(x, y, z, width, height, color1, parent) {
-
     const material = new THREE.MeshBasicMaterial({
       color: color1,
       opacity: 0.4,
       transparent: true
     });
 
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height),
-      material);
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), material);
 
     plane.position.set(x, y, z);
     parent.add(plane);
-
   }
-
-
-
-
-
 });

@@ -17,9 +17,9 @@ export default DrawEdgeEntity.extend({
   operationName: attr('string'),
   requests: attr(),
 
-  runtimeInformations:  hasMany('runtimeinformation', {
+  runtimeInformations: hasMany('runtimeinformation', {
     inverse: null
-}),
+  }),
 
   sourceClazz: belongsTo('clazz', {
     inverse: 'outgoingClazzCommunications'

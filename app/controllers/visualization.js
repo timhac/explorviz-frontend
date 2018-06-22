@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service'; 
-import { computed } from '@ember/object';
-import { observer } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { computed, observer } from '@ember/object';
 
 /**
 * TODO
@@ -14,11 +13,11 @@ import { observer } from '@ember/object';
 */
 export default Controller.extend({
 
-  urlBuilder: service("url-builder"),
-  viewImporter: service("view-importer"),
-  reloadHandler: service("reload-handler"),
-  renderingService: service("rendering-service"),
-  landscapeRepo: service("repos/landscape-repository"),
+  urlBuilder: service('url-builder'),
+  viewImporter: service('view-importer'),
+  reloadHandler: service('reload-handler'),
+  renderingService: service('rendering-service'),
+  landscapeRepo: service('repos/landscape-repository'),
 
   state: null,
 
@@ -35,18 +34,18 @@ export default Controller.extend({
   camZ: null,
   condition: null,
 
-  observer: observer('viewImporter.importedURL', function() {
-    if(!this.get('viewImporter.importedURL')) {
-      this.set('timestamp',null);
-      this.set('appID',null);
-      this.set('camX',null);
-      this.set('camY',null);
-      this.set('camZ',null);
-      this.set('condition',[]);
+  observer: observer('viewImporter.importedURL', function () {
+    if (!this.get('viewImporter.importedURL')) {
+      this.set('timestamp', null);
+      this.set('appID', null);
+      this.set('camX', null);
+      this.set('camY', null);
+      this.set('camZ', null);
+      this.set('condition', []);
     }
   }),
 
-  showLandscape: computed('landscapeRepo.latestApplication', function() {
+  showLandscape: computed('landscapeRepo.latestApplication', function () {
     return !this.get('landscapeRepo.latestApplication');
   }),
 
@@ -57,14 +56,13 @@ export default Controller.extend({
       this.get('renderingService').reSetupScene();
       this.get('reloadHandler').startExchange();
     }
-    
   },
 
   showTimeline() {
     this.set('renderingService.showTimeline', true);
   },
 
-  hideVersionbar(){
+  hideVersionbar() {
     this.set('renderingService.showVersionbar', false);
   },
 
@@ -77,12 +75,12 @@ export default Controller.extend({
     this.set('condition', []);
 
     // setup url-builder Service
-    this.get('urlBuilder').on('transmitState', function(state) {
-      self.set('state',state);
+    this.get('urlBuilder').on('transmitState', function (state) {
+      self.set('state', state);
     });
 
     // Listen for component request
-    this.get('viewImporter').on('requestView', function() {
+    this.get('viewImporter').on('requestView', function () {
       const newState = {};
       // Get and convert query params
 
@@ -104,6 +102,5 @@ export default Controller.extend({
     this._super(...arguments);
     this.get('urlBuilder').off('transmitState');
     this.get('viewImporter').off('requestView');
-  }  
-  
+  }
 });

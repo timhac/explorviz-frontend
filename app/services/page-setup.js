@@ -32,8 +32,7 @@ export default Service.extend({
   init() {
     this._super(...arguments);
 
-    this.set('navbarRoutes', ["visualization", "tutorial", "replay", "discovery"]);
+    this.set('navbarRoutes', ['visualization', 'tutorial', 'replay', 'discovery']);
     this.set('navbarGlyphicons', []);
-
   }
 });

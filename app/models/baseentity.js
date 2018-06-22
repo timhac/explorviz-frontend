@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-const {Model, attr} = DS;
+const { Model, attr } = DS;
 
 /**
 * Ember model for a BaseEntity. Every element of ExplorViz's Meta-Model should

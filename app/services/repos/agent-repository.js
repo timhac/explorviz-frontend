@@ -3,7 +3,7 @@ import Evented from '@ember/object/evented';
 
 /**
 * TODO
-* 
+*
 * @class Landscape-Repository-Service
 * @extends Ember.Service
 */

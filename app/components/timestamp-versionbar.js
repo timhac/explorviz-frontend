@@ -1,14 +1,14 @@
 import Component from '@ember/component';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 import $ from 'jquery';
 
 /* global c3 */
 
 export default Component.extend({
 
-  timestampRepo: service("repos/timestamp-repository"),
-  versionbarLoad: service("versionbar-load"),
-  reloadHandler: service("reload-handler"),
+  timestampRepo: service('repos/timestamp-repository'),
+  versionbarLoad: service('versionbar-load'),
+  reloadHandler: service('reload-handler'),
 
   plot: null,
 
@@ -18,24 +18,23 @@ export default Component.extend({
 
   actions: {
     toggleVersionbar() {
-      if ($(".versionbar").attr('vis') === 'show') {
+      if ($('.versionbar').attr('vis') === 'show') {
         // hide versionbar
         this.set('isUp', false);
-        $(".versionbar").slideUp(400);
-        $("#vizContainer").animate({height:'+=120'});
-        $(".versionbar").attr('vis', 'hide');
-        $("#toggleVersionbarButton").removeClass('glyphicon-collapse-down')
-        .addClass('glyphicon-collapse-up');
-      }
-      else {
+        $('.versionbar').slideUp(400);
+        $('#vizContainer').animate({ height: '+=120' });
+        $('.versionbar').attr('vis', 'hide');
+        $('#toggleVersionbarButton').removeClass('glyphicon-collapse-down')
+          .addClass('glyphicon-collapse-up');
+      } else {
         // show versionbar
         this.set('isUp', true);
-        $(".versionbar").slideDown('fast');
-        $("#vizContainer").animate({height:'-=120'});
+        $('.versionbar').slideDown('fast');
+        $('#vizContainer').animate({ height: '-=120' });
 
-        $(".versionbar").attr('vis', 'show');
-        $("#toggleVersionbarButton").removeClass('glyphicon-collapse-up')
-        .addClass('glyphicon-collapse-down');
+        $('.versionbar').attr('vis', 'show');
+        $('#toggleVersionbarButton').removeClass('glyphicon-collapse-up')
+          .addClass('glyphicon-collapse-down');
       }
     },
   },
@@ -45,13 +44,13 @@ export default Component.extend({
     this._super(...arguments);
 
     const self = this;
-    //workaround stop reload of timestamps in time-shift
+    // workaround stop reload of timestamps in time-shift
     this.get('reloadHandler').stopExchange();
-    //init versionbar
+    // init versionbar
     this.get('versionbarLoad').receiveUploadedObjects();
 
     // Listener for updating plot
-    this.get('timestampRepo').on('uploaded', function() {
+    this.get('timestampRepo').on('uploaded', function () {
       self.updatePlot();
     });
   },
@@ -59,24 +58,23 @@ export default Component.extend({
   // @Override
   // Cleanup
   willDestroyElement() {
-    //workaround: hide versionbar, otherwise timeline gets broken
+    // workaround: hide versionbar, otherwise timeline gets broken
     this.hideVersionbar();
     this.get('timestampRepo').off('uploaded');
   },
 
   didRender() {
-
     this._super(...arguments);
 
     const self = this;
 
     const chartData = this.buildChartData();
 
-    if(!chartData) {
+    if (!chartData) {
       return;
     }
 
-    const values = chartData.values;
+    const { values } = chartData;
     values.unshift('Calls');
 
     const dates = chartData.labels;
@@ -95,11 +93,11 @@ export default Component.extend({
           multiple: false
         },
         onclick: ((d) => {
-          //+1, because String 'Labels' is at index 0 and dates start at index 1
+          // +1, because String 'Labels' is at index 0 and dates start at index 1
           self.loadTimestamp(dates[d.x + 1]);
         })
       },
-      transition: {duration: 0},
+      transition: { duration: 0 },
       axis: {
         x: {
           type: 'category',
@@ -135,7 +133,7 @@ export default Component.extend({
       padding: {
         right: 30,
       },
-      onresized: function() {
+      onresized: function () {
         self.applyOptimalZoom();
       }
     });
@@ -144,25 +142,24 @@ export default Component.extend({
     this.applyOptimalZoom();
   },
 
-  //hides versionbar
-  hideVersionbar(){
-    if ($(".versionbar").attr('vis') === 'show') {
+  // hides versionbar
+  hideVersionbar() {
+    if ($('.versionbar').attr('vis') === 'show') {
       // hide versionbar
       this.set('isUp', false);
-      $(".versionbar").slideUp(400);
-      $("#vizContainer").animate({height:'+=120'});
-      $(".versionbar").attr('vis', 'hide');
-      $("#toggleVersionbarButton").removeClass('glyphicon-collapse-down')
-      .addClass('glyphicon-collapse-up');
+      $('.versionbar').slideUp(400);
+      $('#vizContainer').animate({ height: '+=120' });
+      $('.versionbar').attr('vis', 'hide');
+      $('#toggleVersionbarButton').removeClass('glyphicon-collapse-down')
+        .addClass('glyphicon-collapse-up');
     }
   },
   // build chart-ready data
   buildChartData() {
-
     const timestamps = this.get('timestampRepo.uploadedTimestamps');
 
-    if(!timestamps) {
-      return;
+    if (!timestamps) {
+      return null;
     }
 
     const sortedTimestamps = timestamps.sortBy('timestamp');
@@ -174,7 +171,7 @@ export default Component.extend({
 
     // Parse and format timestamps for versionbar
     if (sortedTimestamps) {
-      sortedTimestamps.forEach(function(timestamp) {
+      sortedTimestamps.forEach(function (timestamp) {
         const timestampValue = timestamp.get('timestamp');
         timestampList.push(timestampValue);
 
@@ -194,30 +191,28 @@ export default Component.extend({
 
 
   updatePlot() {
-
     const self = this;
 
     let updatedPlot = this.get('plot');
 
-    if(!updatedPlot){
+    if (!updatedPlot) {
       this.renderPlot();
       updatedPlot = this.get('plot');
-      //return;
+      // return;
     }
 
     const chartReadyTimestamps = this.buildChartData();
 
-    const labels = chartReadyTimestamps.labels;
-    const values = chartReadyTimestamps.values;
+    const { labels, values } = chartReadyTimestamps;
 
     labels.unshift('Labels');
     values.unshift('Calls');
 
-    //flow() with category-labels on the X-axis doesn't work: https://github.com/c3js/c3/issues/865
+    // flow() with category-labels on the X-axis doesn't work: https://github.com/c3js/c3/issues/865
     updatedPlot.load({
       columns: [labels, values],
       done: function () {
-        //render plot, so that data and rendered chart are consistent
+        // render plot, so that data and rendered chart are consistent
         self.renderPlot();
         updatedPlot.zoom.enable(true);
         self.applyOptimalZoom();
@@ -227,13 +222,12 @@ export default Component.extend({
 
 
   applyOptimalZoom() {
-
-    if(!this.get('isUp')) {
+    if (!this.get('isUp')) {
       return;
     }
 
-    if(!this.get('plot').data()[0]){
-      //situation: no timestamps uploaded, no data available
+    if (!this.get('plot').data()[0]) {
+      // situation: no timestamps uploaded, no data available
       return;
     }
 
@@ -246,17 +240,18 @@ export default Component.extend({
     const numberOfPointsToShow = parseInt(divWidth /
       this.get('dataPointPixelRatio'));
 
-      const lowerBound = dataSetLength - numberOfPointsToShow <= 0 ?
-      0 : (dataSetLength - numberOfPointsToShow) ;
+    const lowerBound = dataSetLength - numberOfPointsToShow <= 0 ?
+      0 : (dataSetLength - numberOfPointsToShow);
 
-      const lowerBoundLabel = allData[lowerBound].x;
-      const upperBoundLabel = allData[dataSetLength - 1].x;
+    const lowerBoundLabel = allData[lowerBound].x;
+    const upperBoundLabel = allData[dataSetLength - 1].x;
 
-      this.get('plot').zoom([lowerBoundLabel, upperBoundLabel]);
-    },
+    this.get('plot').zoom([lowerBoundLabel, upperBoundLabel]);
+  },
 
 
-    loadTimestamp(timestamp) {
-      this.get('reloadHandler').loadOldLandscapeById(timestamp);
-    }
-  });
+  loadTimestamp(timestamp) {
+    this.get('reloadHandler').loadOldLandscapeById(timestamp);
+  }
+});
+

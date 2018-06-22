@@ -5,7 +5,7 @@ export default Route.extend({
   actions: {
 
     resetRoute() {
-      this.debug("not implemented");
+      this.debug('not implemented');
     }
   }
 

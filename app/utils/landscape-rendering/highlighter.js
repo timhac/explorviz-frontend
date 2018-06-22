@@ -1,42 +1,39 @@
 import Object from '@ember/object';
+import THREE from 'npm:three';
 import { calculateColorBrightness } from '../helpers/threejs-helpers';
-import THREE from "npm:three";
 
 export default Object.extend({
 
   hoveredEntityColorObj: null,
 
   highlight(entity) { // eslint-disable-line
-    
+
   },
 
 
   resetHoverEffect() {
-    if(this.get('hoveredEntityColorObj')) {
-
-      this.get('hoveredEntityColorObj').entity.material.color = 
+    if (this.get('hoveredEntityColorObj')) {
+      this.get('hoveredEntityColorObj').entity.material.color =
         this.get('hoveredEntityColorObj').color;
 
       this.set('hoveredEntityColorObj', null);
-
     }
   },
 
 
   handleHoverEffect(raycastTarget) {
-
     // no raycastTarget, do nothing and return
-    if(!raycastTarget) {
+    if (!raycastTarget) {
       this.resetHoverEffect();
-        return;
+      return;
     }
 
     const newHoverEntity = raycastTarget.object;
 
     // same object, do nothing and return
-    if(this.get('hoveredEntityColorObj') && 
+    if (this.get('hoveredEntityColorObj') &&
       this.get('hoveredEntityColorObj').entity === newHoverEntity) {
-        return;
+      return;
     }
 
     this.resetHoverEffect();
@@ -49,7 +46,6 @@ export default Object.extend({
     });
 
     newHoverEntity.material.color = calculateColorBrightness(oldColor, 1.12);
-    
   },
 
 
@@ -57,6 +53,5 @@ export default Object.extend({
 
 
   applyHighlighting() {}
-  
 
 });

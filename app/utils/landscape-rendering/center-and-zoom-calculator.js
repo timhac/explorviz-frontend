@@ -1,14 +1,13 @@
 import Object from '@ember/object';
 import Evented from '@ember/object/evented';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 
 export default Object.extend(Evented, {
 
-  centerPoint : null,
+  centerPoint: null,
   cameraZ: null,
 
   calculateLandscapeCenterAndZZoom(emberLandscape, renderer) {
-
     const MIN_X = 0;
     const MAX_X = 1;
     const MIN_Y = 2;
@@ -26,15 +25,18 @@ export default Object.extend(Evented, {
 
     const viewPortSize = renderer.getSize();
 
-    let viewportRatio = viewPortSize.width / viewPortSize.height;
+    const viewportRatio = viewPortSize.width / viewPortSize.height;
 
     const sizeFactor = 0.65;
 
     const newZ_by_width = (requiredWidth / viewportRatio) * sizeFactor;
     const newZ_by_height = requiredHeight * sizeFactor;
 
-    const center = new THREE.Vector3(rect.get(MIN_X) + ((rect.get(MAX_X) - rect.get(MIN_X)) / 2.0),
-      rect.get(MIN_Y) + ((rect.get(MAX_Y) - rect.get(MIN_Y)) / 2.0), 0);
+    const center = new THREE.Vector3(
+      rect.get(MIN_X) + ((rect.get(MAX_X) - rect.get(MIN_X)) / 2.0),
+      rect.get(MIN_Y) + ((rect.get(MAX_Y) - rect.get(MIN_Y)) / 2.0),
+      0
+    );
 
     const cameraZ = Math.max(Math.max(newZ_by_height, newZ_by_width), 10.0);
 
@@ -44,13 +46,12 @@ export default Object.extend(Evented, {
     // Helper functions
 
     function getLandscapeRect(emberLandscape) {
-
       const MIN_X = 0;
       const MAX_X = 1;
       const MIN_Y = 2;
       const MAX_Y = 3;
 
-      let rect = [];
+      const rect = [];
       rect.push(Number.MAX_VALUE);
       rect.push(-Number.MAX_VALUE);
       rect.push(Number.MAX_VALUE);
@@ -69,24 +70,19 @@ export default Object.extend(Evented, {
 
           const nodegroups = system.get('nodegroups');
           nodegroups.forEach((nodegroup) => {
-
             const nodes = nodegroup.get('nodes');
             nodes.forEach((node) => {
               getMinMaxFromQuad(node, rect);
             });
-
           });
-
         });
       }
 
       return rect;
-
     }
 
 
     function getMinMaxFromQuad(drawnodeentity, rect) {
-
       const MIN_X = 0;
       const MAX_X = 1;
       const MIN_Y = 2;
@@ -108,11 +104,7 @@ export default Object.extend(Evented, {
       if (rect[MIN_Y] > curY - drawnodeentity.get('height')) {
         rect[MIN_Y] = curY - drawnodeentity.get('height');
       }
-
     }
-
   }
-
-
 
 });

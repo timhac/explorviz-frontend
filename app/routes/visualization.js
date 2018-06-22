@@ -1,6 +1,6 @@
-import BaseRoute from './base-route';
 import AuthenticatedRouteMixin from
- 'ember-simple-auth/mixins/authenticated-route-mixin';
+  'ember-simple-auth/mixins/authenticated-route-mixin';
+import BaseRoute from './base-route';
 
 /**
 * TODO

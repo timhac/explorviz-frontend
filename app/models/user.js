@@ -15,9 +15,9 @@ const { attr } = DS;
  */
 export default Model.extend({
 
-	username: attr('string'),
-	password: attr('string'),
-	token: attr('string'),
-	isAuthenticated: attr('boolean')
+  username: attr('string'),
+  password: attr('string'),
+  token: attr('string'),
+  isAuthenticated: attr('boolean')
 
 });

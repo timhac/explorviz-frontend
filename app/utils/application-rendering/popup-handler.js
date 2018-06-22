@@ -1,48 +1,42 @@
 import Object from '@ember/object';
 import Evented from '@ember/object/evented';
-import { encodeStringForPopUp } from '../helpers/string-helpers';
 import $ from 'jquery';
+import { encodeStringForPopUp } from '../helpers/string-helpers';
 
 export default Object.extend(Evented, {
 
   alreadyDestroyed: true,
 
   showTooltip(mouse, emberModel) {
+    const content = this.buildContent(emberModel);
 
-    let content = this.buildContent(emberModel);
-
-    if(content.title === '' && content.html === '') {
+    if (content.title === '' && content.html === '') {
       return;
     }
 
     // Bootstrap Popover
-    $('#vizContainer').popover(
-      {
-        title: '<div style="font-weight:bold;text-align:center;">' +
-          content.title + '</div>',
-        content : content.html,
-        placement: 'top',
-        trigger: 'manual',
-        html: true
-      }
-    );
+    $('#vizContainer').popover({
+      title: `<div style="font-weight:bold;text-align:center;">${content.title}</div>`,
+      content: content.html,
+      placement: 'top',
+      trigger: 'manual',
+      html: true
+    });
 
     $('#vizContainer').popover('show');
 
     const topOffset = $('.popover').height() + 7;
     const leftOffset = $('.popover').width() / 2;
 
-    $('.popover').css('top', mouse.y - topOffset + 'px');
-    $('.popover').css('left', mouse.x - leftOffset + 'px');
+    $('.popover').css('top', `${mouse.y - topOffset}px`);
+    $('.popover').css('left', `${mouse.x - leftOffset}px`);
 
     this.set('alreadyDestroyed', false);
-
   },
 
 
   hideTooltip() {
-
-    if(!this.get('alreadyDestroyed')) {
+    if (!this.get('alreadyDestroyed')) {
       $('#vizContainer').popover('destroy');
       this.set('alreadyDestroyed', true);
     }
@@ -50,17 +44,15 @@ export default Object.extend(Evented, {
 
 
   buildContent: function (emberModel) {
-    let content = {title: '', html: ''};
+    let content = { title: '', html: '' };
 
     const modelType = emberModel.constructor.modelName;
 
     if (modelType === 'component') {
       content = buildComponentContent(emberModel);
-    }
-    else if (modelType === 'clazz') {
+    } else if (modelType === 'clazz') {
       content = buildClazzContent(emberModel);
-    }
-    else if (modelType === 'cumulatedclazzcommunication') {
+    } else if (modelType === 'cumulatedclazzcommunication') {
       content = buildCumulatedClazzCommunicationContent(emberModel);
     }
 
@@ -70,8 +62,7 @@ export default Object.extend(Evented, {
     // Helper functions
 
     function buildComponentContent(component) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       content.title = encodeStringForPopUp(component.get('name'));
 
@@ -82,14 +73,12 @@ export default Object.extend(Evented, {
         '<table style="width:100%">' +
         '<tr>' +
         '<td>Contained Classes:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        clazzesCount +
+        `<td style="text-align:right;padding-left:10px;">${clazzesCount}` +
         '</td>' +
         '</tr>' +
         '<tr>' +
         '<td>Contained Packages:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        packageCount +
+        `<td style="text-align:right;padding-left:10px;">${packageCount}` +
         '</td>' +
         '</tr>' +
         '</table>';
@@ -123,8 +112,7 @@ export default Object.extend(Evented, {
 
 
     function buildClazzContent(clazz) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       content.title = clazz.get('name');
 
@@ -134,14 +122,12 @@ export default Object.extend(Evented, {
         '<table style="width:100%">' +
         '<tr>' +
         '<td>Active Instances:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        clazz.get('instanceCount') +
+        `<td style="text-align:right;padding-left:10px;">${clazz.get('instanceCount')}` +
         '</td>' +
         '</tr>' +
         '<tr>' +
         '<td>Called Operations:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        calledOperations +
+        `<td style="text-align:right;padding-left:10px;">${calledOperations}` +
         '</td>' +
         '</tr>' +
         '</table>';
@@ -156,8 +142,7 @@ export default Object.extend(Evented, {
 
     // Information about a clazzCommunication between two classes
     function buildCumulatedClazzCommunicationContent(cumulatedClazzCommunication) {
-
-      let content = {title: '', html: ''};
+      const content = { title: '', html: '' };
 
       const sourceClazzName = cumulatedClazzCommunication.get('sourceClazz').get('name');
       const targetClazzName = cumulatedClazzCommunication.get('targetClazz').get('name');
@@ -168,11 +153,11 @@ export default Object.extend(Evented, {
 
       // Formatted values for the clazzCommunication popup
       const formatFactor = 1000; // convert from ns to ms
-      const avgAverageResponseTime =  round(runtimeStats.avgAverageResponseTime / formatFactor, 0);
-      const avgOverallTraceDuration =  round(runtimeStats.avgOverallTraceDuration / formatFactor, 0);
+      const avgAverageResponseTime = round(runtimeStats.avgAverageResponseTime / formatFactor, 0);
+      const avgOverallTraceDuration = round(runtimeStats.avgOverallTraceDuration / formatFactor, 0);
 
 
-      /// determine the direction of communication symbol
+      // determine the direction of communication symbol
       // default uni-directional
       let commDirectionString = "&nbsp;<span class='glyphicon glyphicon-arrow-right'></span>&nbsp;";
       // bi-directional communication
@@ -180,44 +165,43 @@ export default Object.extend(Evented, {
         commDirectionString = "&nbsp;<span class='glyphicon glyphicon-transfer'></span>&nbsp;";
       }
 
-      content.title = encodeStringForPopUp(sourceClazzName) + commDirectionString + encodeStringForPopUp(targetClazzName);
+      content.title = encodeStringForPopUp(sourceClazzName) + commDirectionString +
+        encodeStringForPopUp(targetClazzName);
 
       content.html =
         '<table style="width:100%">' +
         '<tr>' +
         '<td>&nbsp;<span class=\'glyphicon glyphicon-tasks\'></span>&nbsp; Requests:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        cumulatedClazzCommunication.get('requests') +
+        `<td style="text-align:right;padding-left:10px;">${cumulatedClazzCommunication.get('requests')}` +
         '</td>' +
         '</tr>' +
         '<tr>' +
         '<td>&nbsp;<span class=\'glyphicon glyphicon-triangle-right\'></span>&nbsp; Involved Traces :</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        runtimeStats.involvedTraces.length +
+        `<td style="text-align:right;padding-left:10px;">${runtimeStats.involvedTraces.length}` +
         '</td>' +
         '</tr>' +
         '<tr>' +
         '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Response Time:</td>' +
         '<td style="text-align:right;padding-left:10px;">' +
-        avgAverageResponseTime + ' ms' +
+        `${avgAverageResponseTime} ms` +
         '</td>' +
         '</tr>' +
         '<tr>' +
         '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Duration:</td>' +
         '<td style="text-align:right;padding-left:10px;">' +
-        avgOverallTraceDuration + ' ms' +
+        `${avgOverallTraceDuration} ms` +
         '</td>' +
         '</tr>' +
         '</table>';
 
       return content;
 
-      // retrieves runtime information for a specific aggregatedClazzCommunication (same sourceClazz and tagetClazz)
+      // retrieves runtime information for a specific aggregatedClazzCommunication
+      // (same sourceClazz and tagetClazz)
       function getRuntimeInformations(cumulatedClazzCommunication) {
-
         const aggregatedClazzCommunications = cumulatedClazzCommunication.get('aggregatedClazzCommunications');
 
-        let runtimeStats = {
+        const runtimeStats = {
           // sum up
           totalOverallTraceDuration: 0,
           totalAverageResponseTime: 0,
@@ -231,40 +215,37 @@ export default Object.extend(Evented, {
         var runtimeInformationCounter = 0;
 
         aggregatedClazzCommunications.forEach((aggregatedClazzCommunication) => {
-
           const clazzCommunications = aggregatedClazzCommunication.get('outgoingClazzCommunications');
 
-          // retrieves runtime information for every clazzCommunication (same sourceClazz, targetClazz, and operationName)
+          // retrieves runtime information for every clazzCommunication
+          // (same sourceClazz, targetClazz, and operationName)
           clazzCommunications.forEach((clazzCommunication) => {
-              const runtimeInformations = clazzCommunication.get('runtimeInformations');
-              runtimeInformations.forEach((runtimeInformation) => {
+            const runtimeInformations = clazzCommunication.get('runtimeInformations');
+            runtimeInformations.forEach((runtimeInformation) => {
+              runtimeStats.involvedTraces.push(runtimeInformation.get('traceId'));
+              runtimeStats.totalOverallTraceDuration += runtimeInformation.get('overallTraceDuration');
+              runtimeStats.totalAverageResponseTime += runtimeInformation.get('averageResponseTime');
 
-                runtimeStats.involvedTraces.push(runtimeInformation.get('traceId'));
-                runtimeStats.totalOverallTraceDuration += runtimeInformation.get('overallTraceDuration');
-                runtimeStats.totalAverageResponseTime += runtimeInformation.get('averageResponseTime');
-
-                runtimeInformationCounter++;
-              });
-
+              runtimeInformationCounter++;
+            });
           });
         });
 
         if (runtimeInformationCounter > 0) {
-          runtimeStats.avgAverageResponseTime = runtimeStats.totalAverageResponseTime / runtimeInformationCounter;
-          runtimeStats.avgOverallTraceDuration = runtimeStats.totalOverallTraceDuration / runtimeInformationCounter;
+          runtimeStats.avgAverageResponseTime =
+            runtimeStats.totalAverageResponseTime / runtimeInformationCounter;
+          runtimeStats.avgOverallTraceDuration =
+            runtimeStats.totalOverallTraceDuration / runtimeInformationCounter;
         }
 
         return runtimeStats;
-
       } // END getRuntimeInformations
 
       function round(value, precision) {
-        var multiplier = Math.pow(10, precision || 0);
+        var multiplier = 10 ** (precision || 0);
         return Math.round(value * multiplier) / multiplier;
       } // END round
-
     } // END buildClazzCommunicationContent
-
   } // END buildApplicationContent
 
 });

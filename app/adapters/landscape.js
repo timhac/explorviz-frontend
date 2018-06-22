@@ -21,24 +21,22 @@ const { JSONAPIAdapter } = DS;
 export default JSONAPIAdapter.extend(DataAdapterMixin, {
 
   host: ENV.APP.API_ROOT,
-  namespace: "landscape",
+  namespace: 'landscape',
 
   init() {
-
     this.set('headers', {
-      "Accept": "application/vnd.api+json"
+      'Accept': 'application/vnd.api+json'
     });
- 
   },
 
-  //@Override
+  // @Override
   urlForQueryRecord(query) {
     const baseUrl = this.buildURL();
     return `${baseUrl}/${query}`;
   },
 
   authorize(xhr) {
-    let { access_token } = this.get('session.data.authenticated');
+    const { access_token } = this.get('session.data.authenticated');
     xhr.setRequestHeader('Authorization', `Basic ${access_token}`);
   }
 

@@ -8,9 +8,9 @@ import ApplicationSerializer from './application';
  */
 export default ApplicationSerializer.extend({
 
-  //This attribute will declare to serialize hasMany-relationships
-  attrs:{
-    nodegroups:{serialize:true},
+  // This attribute will declare to serialize hasMany-relationships
+  attrs: {
+    nodegroups: { serialize: true },
   }
 
 });

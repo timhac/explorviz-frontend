@@ -1,14 +1,14 @@
 import Component from '@ember/component';
-import { inject as service } from "@ember/service";
+import { inject as service } from '@ember/service';
 import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
-import $ from "jquery";
+import $ from 'jquery';
 
 
 export default Component.extend(AlertifyHandler, {
 
   store: service(),
 
-  classNames: ["relative scroll-container"],
+  classNames: ['relative scroll-container'],
 
   showSpinner: false,
 
@@ -17,22 +17,22 @@ export default Component.extend(AlertifyHandler, {
   // @Override
   init() {
     this._super(...arguments);
-    
+
     // enable bootstrap tooltip effect
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip(); 
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
     });
   },
 
 
   // @Override
-  willInsertElement: function(){
+  willInsertElement: function () {
     this._super(...arguments);
     // Save the monitoring flag on component setup
     // We can therefore use it to show a message for the user
-    // (showMessageForUser)  
+    // (showMessageForUser)
     const monitoredFlag = this.get('procezz.monitoredFlag');
-    this.set('monitoredFlag', monitoredFlag); 
+    this.set('monitoredFlag', monitoredFlag);
   },
 
   actions: {
@@ -40,30 +40,28 @@ export default Component.extend(AlertifyHandler, {
     saveProcezz() {
       const self = this;
 
-      if(this.get('procezz.hasDirtyAttributes')){
+      if (this.get('procezz.hasDirtyAttributes')) {
         this.set('showSpinner', true);
 
-        this.get('procezz').save({include: 'agent'}).then(() => {
+        this.get('procezz').save({ include: 'agent' }).then(() => {
           self.set('showSpinner', false);
-          self.showMessageForUser(self.buildUpdateMessageForUser(true));     
+          self.showMessageForUser(self.buildUpdateMessageForUser(true));
         })
-        .catch((errorObject) => {
+          .catch((errorObject) => {
+            self.get('procezz').rollbackAttributes();
 
-          self.get('procezz').rollbackAttributes();
+            self.set('procezz.errorOccured', true);
+            self.set('procezz.errorMessage', errorObject);
 
-          self.set('procezz.errorOccured', true);
-          self.set('procezz.errorMessage', errorObject);
-
-          // closure action from discovery controller
-          self.errorHandling(errorObject);
-        });
+            // closure action from discovery controller
+            self.errorHandling(errorObject);
+          });
       } else {
         self.showMessageForUser(self.buildUpdateMessageForUser(false));
       }
-    }, 
+    },
 
     restartProcezz() {
-
       const self = this;
 
       // this attribute will trigger the agent
@@ -76,24 +74,23 @@ export default Component.extend(AlertifyHandler, {
       this.get('procezz').save({
         include: 'agent'
       })
-      .then(() => {
-        self.set('showSpinner', false);
-        self.showMessageForUser(self.buildRestartMessageForUser());     
-      })
-      .catch((errorObject) => {
-        self.get('procezz').rollbackAttributes();
-       
-        // closure action from discovery controller
-        self.errorHandling(errorObject);
-      });
+        .then(() => {
+          self.set('showSpinner', false);
+          self.showMessageForUser(self.buildRestartMessageForUser());
+        })
+        .catch((errorObject) => {
+          self.get('procezz').rollbackAttributes();
+
+          // closure action from discovery controller
+          self.errorHandling(errorObject);
+        });
     },
 
     stopProcezz() {
-
       const self = this;
 
       // this attribute will trigger the agent
-      // to stop the procezz      
+      // to stop the procezz
       this.set('procezz.stopped', true);
       this.set('procezz.restart', false);
 
@@ -102,55 +99,51 @@ export default Component.extend(AlertifyHandler, {
       this.get('procezz').save({
         include: 'agent'
       })
-      .then(() => {
-        self.set('showSpinner', false);
-        self.showMessageForUser("Procezz was stopped.");     
-      })
-      .catch((errorObject) => {
-        self.get('procezz').rollbackAttributes();
-       
-        // closure action from discovery controller
-        self.errorHandling(errorObject);
-      });
+        .then(() => {
+          self.set('showSpinner', false);
+          self.showMessageForUser('Procezz was stopped.');
+        })
+        .catch((errorObject) => {
+          self.get('procezz').rollbackAttributes();
+
+          // closure action from discovery controller
+          self.errorHandling(errorObject);
+        });
     }
   },
 
   buildRestartMessageForUser() {
-    const mainMessage = "Procezz restarted.";
-    let monitoringMessage = "";
+    const mainMessage = 'Procezz restarted.';
+    let monitoringMessage = '';
 
     const monitoredFlag = this.get('procezz').get('monitoredFlag');
     const oldMonitoredFlag = this.get('monitoredFlag');
 
-    if(monitoredFlag !== oldMonitoredFlag && monitoredFlag) {
+    if (monitoredFlag !== oldMonitoredFlag && monitoredFlag) {
       // was set from off to on
-      monitoringMessage = "Monitoring was started.";
-    }
-    else if(monitoredFlag !== oldMonitoredFlag && !monitoredFlag) {
+      monitoringMessage = 'Monitoring was started.';
+    } else if (monitoredFlag !== oldMonitoredFlag && !monitoredFlag) {
       // was set from on to off
-      monitoringMessage = "Monitoring was stopped.";
+      monitoringMessage = 'Monitoring was stopped.';
     }
 
     return `${mainMessage} ${monitoringMessage}`;
   },
 
-  buildUpdateMessageForUser(hasDirtyAttributes) {    
+  buildUpdateMessageForUser(hasDirtyAttributes) {
+    let mainMessage = 'No change detected.';
 
-    let mainMessage = "No change detected.";
-
-    if(hasDirtyAttributes) {
-      mainMessage = "Procezz updated.";
+    if (hasDirtyAttributes) {
+      mainMessage = 'Procezz updated.';
     }
 
     return mainMessage;
   },
 
   showMessageForUser(message) {
-
     this.set('monitoredFlag', this.get('procezz').get('monitoredFlag'));
 
-    this.showAlertifyMessageWithDuration(
-      `${message} Click on <b>Discovery</b> to go back.`, 4);
+    this.showAlertifyMessageWithDuration(`${message} Click on <b>Discovery</b> to go back.`, 4);
   }
 
 });

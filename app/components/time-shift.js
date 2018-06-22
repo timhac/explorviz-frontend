@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 import $ from 'jquery';
 
 /* global c3 */
@@ -24,8 +24,8 @@ import $ from 'jquery';
 */
 export default Component.extend({
 
-  timestampRepo: service("repos/timestamp-repository"),
-  reloadHandler: service("reload-handler"),
+  timestampRepo: service('repos/timestamp-repository'),
+  reloadHandler: service('reload-handler'),
 
   plot: null,
 
@@ -36,32 +36,30 @@ export default Component.extend({
   actions: {
 
     toggleTimeline() {
-      if ($(".timeline").attr('vis') === 'show') {
+      if ($('.timeline').attr('vis') === 'show') {
         // hide timeline
         this.set('isUp', false);
-        $(".timeline").slideUp(400);
-        $("#vizContainer").animate({height:'+=120'});
-        $(".timeline").attr('vis', 'hide');
-        $("#toggleTimelineButton").removeClass('glyphicon-collapse-down')
+        $('.timeline').slideUp(400);
+        $('#vizContainer').animate({ height: '+=120' });
+        $('.timeline').attr('vis', 'hide');
+        $('#toggleTimelineButton').removeClass('glyphicon-collapse-down')
           .addClass('glyphicon-collapse-up');
-      }
-      else {
+      } else {
         // show timeline
         this.set('isUp', true);
-        $(".timeline").slideDown('fast');
-        $("#vizContainer").animate({height:'-=120'});
+        $('.timeline').slideDown('fast');
+        $('#vizContainer').animate({ height: '-=120' });
 
-        $(".timeline").attr('vis', 'show');
-        $("#toggleTimelineButton").removeClass('glyphicon-collapse-up')
+        $('.timeline').attr('vis', 'show');
+        $('#toggleTimelineButton').removeClass('glyphicon-collapse-up')
           .addClass('glyphicon-collapse-down');
       }
     },
 
     playPauseTimeshift() {
-      if(this.get('reloadHandler.isReloading')) {
+      if (this.get('reloadHandler.isReloading')) {
         this.get('reloadHandler').stopExchange();
-      }
-      else {
+      } else {
         this.get('reloadHandler').startExchange();
       }
     }
@@ -74,24 +72,23 @@ export default Component.extend({
     const self = this;
 
     // Listener for updating plot
-    this.get('timestampRepo').on('updated', function() {
+    this.get('timestampRepo').on('updated', function () {
       self.updatePlot();
     });
 
     // Listeners for changing play / pause css
-    this.get('reloadHandler').on('stopExchange', function() {
+    this.get('reloadHandler').on('stopExchange', function () {
       $('#playPauseTimelineButton').removeClass('glyphicon-pause')
         .addClass('glyphicon-play');
     });
 
-    this.get('reloadHandler').on('startExchange', function() {
+    this.get('reloadHandler').on('startExchange', function () {
       $('#playPauseTimelineButton').removeClass('glyphicon-play')
         .addClass('glyphicon-pause');
 
-      if(self.get('plot')) {
+      if (self.get('plot')) {
         self.get('plot').unselect(['Timestamps']);
       }
-
     });
   },
 
@@ -99,7 +96,7 @@ export default Component.extend({
   // @Override
   // Cleanup
   willDestroyElement() {
-      //workaround: hide timeline, otherwise the component timestamp-versionbar gets broken
+    // workaround: hide timeline, otherwise the component timestamp-versionbar gets broken
     this.hideTimeline();
     this.get('timestampRepo').off('updated');
     this.get('reloadHandler').off('stopExchange');
@@ -107,18 +104,17 @@ export default Component.extend({
   },
 
   didRender() {
-
     this._super(...arguments);
 
     const self = this;
 
     const chartData = this.buildChartData();
 
-    if(!chartData) {
+    if (!chartData) {
       return;
     }
 
-    const values = chartData.values;
+    const { values } = chartData;
     values.unshift('Calls');
 
     const dates = chartData.labels;
@@ -141,13 +137,13 @@ export default Component.extend({
           self.loadTimestamp(d);
         })
       },
-      transition: {duration: 0},
+      transition: { duration: 0 },
       axis: {
         x: {
           type: 'timeseries',
           localTime: false,
           tick: {
-              format: '%H:%M:%S'
+            format: '%H:%M:%S'
           },
           label: {
             text: 'Date',
@@ -178,7 +174,7 @@ export default Component.extend({
       padding: {
         right: 30,
       },
-      onresized: function() {
+      onresized: function () {
         self.applyOptimalZoom();
       }
     });
@@ -187,25 +183,24 @@ export default Component.extend({
     this.applyOptimalZoom();
   },
 
-  //hides the timeline
-      hideTimeline(){
-        if ($(".timeline").attr('vis') === 'show') {
-          this.set('isUp', false);
-          $(".timeline").slideUp(400);
-          $("#vizContainer").animate({height:'+=120'});
-          $(".timeline").attr('vis', 'hide');
-          $("#toggleTimelineButton").removeClass('glyphicon-collapse-down')
-            .addClass('glyphicon-collapse-up');
-        }
-      },
+  // hides the timeline
+  hideTimeline() {
+    if ($('.timeline').attr('vis') === 'show') {
+      this.set('isUp', false);
+      $('.timeline').slideUp(400);
+      $('#vizContainer').animate({ height: '+=120' });
+      $('.timeline').attr('vis', 'hide');
+      $('#toggleTimelineButton').removeClass('glyphicon-collapse-down')
+        .addClass('glyphicon-collapse-up');
+    }
+  },
 
   // build chart-ready data
   buildChartData() {
-
     const timestamps = this.get('timestampRepo.latestTimestamps');
 
-    if(!timestamps) {
-      return;
+    if (!timestamps) {
+      return null;
     }
 
     const sortedTimestamps = timestamps.sortBy('timestamp');
@@ -217,16 +212,16 @@ export default Component.extend({
 
     // Parse and format timestamps for timeline
     if (sortedTimestamps) {
-      sortedTimestamps.forEach(function(timestamp) {
+      sortedTimestamps.forEach(function (timestamp) {
         const timestampValue = timestamp.get('timestamp');
         timestampList.push(timestampValue);
 
         const callValue = timestamp.get('calls');
         callList.push(callValue);
 
-        //const parsedTimestampValue = moment(timestampValue,"x");
+        // const parsedTimestampValue = moment(timestampValue,"x");
 
-        //const timestampValueFormatted =
+        // const timestampValueFormatted =
         //  parsedTimestampValue.format("HH:mm:ss").toString();
 
         timestampListFormatted.push(timestampValue);
@@ -243,31 +238,29 @@ export default Component.extend({
 
 
   updatePlot() {
-
     const self = this;
 
     let updatedPlot = this.get('plot');
 
-    if(!updatedPlot){
+    if (!updatedPlot) {
       this.renderPlot();
       updatedPlot = this.get('plot');
-      //return;
+      // return;
     }
 
     const chartReadyTimestamps = this.buildChartData();
 
-    const labels = chartReadyTimestamps.labels;
-    const values = chartReadyTimestamps.values;
+    const { labels, values } = chartReadyTimestamps;
 
-    //labels.unshift('Labels');
-    //values.unshift('Calls');
+    // labels.unshift('Labels');
+    // values.unshift('Calls');
 
     const newLabel = ['Labels', labels.pop()];
     const newValue = ['Calls', values.pop()];
 
     updatedPlot.flow({
       columns: [newLabel, newValue],
-      length:0,
+      length: 0,
       done: function () {
         updatedPlot.zoom.enable(true);
         self.applyOptimalZoom();
@@ -277,8 +270,7 @@ export default Component.extend({
 
 
   applyOptimalZoom() {
-
-    if(!this.get('isUp')) {
+    if (!this.get('isUp')) {
       return;
     }
 
@@ -292,7 +284,7 @@ export default Component.extend({
       this.get('dataPointPixelRatio'));
 
     const lowerBound = dataSetLength - numberOfPointsToShow <= 0 ?
-        0 : (dataSetLength - numberOfPointsToShow) ;
+      0 : (dataSetLength - numberOfPointsToShow);
 
     const lowerBoundLabel = allData[lowerBound].x;
     const upperBoundLabel = allData[dataSetLength - 1].x;

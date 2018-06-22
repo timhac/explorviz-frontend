@@ -4,9 +4,9 @@ import { alias } from '@ember/object/computed';
 
 export default Component.extend({
 
-  toggleIsHidden: alias('agent.isHidden'),  
+  toggleIsHidden: alias('agent.isHidden'),
 
-  lastDiscoveryTimeAsDate: computed('agent.lastDiscoveryTime', function() {
+  lastDiscoveryTimeAsDate: computed('agent.lastDiscoveryTime', function () {
     const lastDiscoveryTime = this.get('agent.lastDiscoveryTime');
     return new Date(lastDiscoveryTime).toLocaleString();
   })

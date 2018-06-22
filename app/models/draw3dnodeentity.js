@@ -1,7 +1,7 @@
-import BaseEntity from './baseentity';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 import { computed } from '@ember/object';
 import DS from 'ember-data';
+import BaseEntity from './baseentity';
 
 const { attr } = DS;
 
@@ -17,21 +17,21 @@ const { attr } = DS;
 */
 export default BaseEntity.extend({
 
-  width: attr('number', { defaultValue: 0}),
-  height: attr('number', { defaultValue: 0}),
-  depth: attr('number', { defaultValue: 0}),
-  positionX: attr('number', { defaultValue: 0}),
-  positionY: attr('number', { defaultValue: 0}),
-  positionZ: attr('number', { defaultValue: 0}),
+  width: attr('number', { defaultValue: 0 }),
+  height: attr('number', { defaultValue: 0 }),
+  depth: attr('number', { defaultValue: 0 }),
+  positionX: attr('number', { defaultValue: 0 }),
+  positionY: attr('number', { defaultValue: 0 }),
+  positionZ: attr('number', { defaultValue: 0 }),
 
-  highlighted: attr('boolean', { defaultValue: false}),
-  opened: attr('boolean', { defaultValue: true}),
-  visible: attr('boolean', { defaultValue: true}),
+  highlighted: attr('boolean', { defaultValue: false }),
+  opened: attr('boolean', { defaultValue: true }),
+  visible: attr('boolean', { defaultValue: true }),
 
-  extension: computed('width', 'height', 'depth', function() {
-    let width = this.get('width') / 2.0;
-    let height = this.get('height') / 2.0;
-    let depth = this.get('depth') / 2.0;
+  extension: computed('width', 'height', 'depth', function () {
+    const width = this.get('width') / 2.0;
+    const height = this.get('height') / 2.0;
+    const depth = this.get('depth') / 2.0;
 
     return new THREE.Vector3(width, height, depth);
   }),

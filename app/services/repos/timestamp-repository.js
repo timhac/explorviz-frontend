@@ -11,14 +11,14 @@ import { observer } from '@ember/object';
 export default Service.extend(Evented, {
 
   latestTimestamps: null,
-  uploadedTimestamps:null,
+  uploadedTimestamps: null,
 
-  observer: observer("latestTimestamps", function(){
-    this.trigger("updated");
+  observer: observer('latestTimestamps', function () {
+    this.trigger('updated');
   }),
 
-  triggerUploaded(){
-    this.trigger("uploaded", this.get("uploadedTimestamps"));
+  triggerUploaded() {
+    this.trigger('uploaded', this.get('uploadedTimestamps'));
   }
 
 });

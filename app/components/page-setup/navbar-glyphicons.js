@@ -1,10 +1,10 @@
 import Component from '@ember/component';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 /**
-* This component renders all components (!), that are registered in 
+* This component renders all components (!), that are registered in
 * {{#crossLink "Page-Setup-Service"}}{{/crossLink}}, as nav-glyphicons.
-* 
+*
 * @class Navbar-Glyphicons
 * @extends Ember.Component
 *
@@ -13,9 +13,9 @@ import {inject as service} from '@ember/service';
 */
 export default Component.extend({
 
-  pageSetupService: service("page-setup"),
+  pageSetupService: service('page-setup'),
 
-  tagName: "ul",
-  classNames:["nav navbar-nav navbar-right"],
-  elementId: "navbar-glyphicons"
+  tagName: 'ul',
+  classNames: ['nav navbar-nav navbar-right'],
+  elementId: 'navbar-glyphicons'
 });

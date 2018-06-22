@@ -1,9 +1,9 @@
 import Component from '@ember/component';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 import Evented from '@ember/object/evented';
 import { Promise } from 'rsvp';
 
-import THREE from "npm:three";
+import THREE from 'npm:three';
 import config from 'explorviz-frontend/config/environment';
 import THREEPerformance from 'explorviz-frontend/mixins/threejs-performance';
 
@@ -30,18 +30,18 @@ export default Component.extend(Evented, THREEPerformance, {
   state: null,
 
   // Declare url-builder service
-  urlBuilder: service("url-builder"),
+  urlBuilder: service('url-builder'),
 
   // Declare view-importer service
-  viewImporter: service("view-importer"),
+  viewImporter: service('view-importer'),
 
-  reloadHandler: service("reload-handler"),
-  landscapeRepo: service("repos/landscape-repository"),
+  reloadHandler: service('reload-handler'),
+  landscapeRepo: service('repos/landscape-repository'),
   renderingService: service(),
 
   classNames: ['viz'],
 
-  scene : null,
+  scene: null,
   webglrenderer: null,
   camera: null,
 
@@ -55,7 +55,7 @@ export default Component.extend(Evented, THREEPerformance, {
   appCondition: null,
   initImport: true,
 
-  init()  {
+  init() {
     this._super(...arguments);
     this.set('appCondition', []);
   },
@@ -68,7 +68,7 @@ export default Component.extend(Evented, THREEPerformance, {
    *
    * @method didRender
    */
-  didRender(){
+  didRender() {
     this._super(...arguments);
     this.initRendering();
     this.initListener();
@@ -96,7 +96,6 @@ export default Component.extend(Evented, THREEPerformance, {
    * @method initRendering
    */
   initRendering() {
-
     this.debug('init rendering-core');
 
     const self = this;
@@ -126,48 +125,41 @@ export default Component.extend(Evented, THREEPerformance, {
       const animationId = requestAnimationFrame(render);
       self.set('animationFrameId', animationId);
 
-      if(config.environment === "development" || config.environment === "akr") {
+      if (config.environment === 'development' || config.environment === 'akr') {
         self.get('threexStats').update(self.get('webglrenderer'));
         self.get('stats').begin();
       }
 
       self.get('webglrenderer').render(self.get('scene'), self.get('camera'));
 
-      if(config.environment === "development" || config.environment === "akr") {
+      if (config.environment === 'development' || config.environment === 'akr') {
         self.get('stats').end();
       }
-
     }
 
     render();
 
-    ////////////////////
+    // //////////////////
 
     // load font for labels and synchronously proceed with populating the scene
     new THREE.FontLoader()
-      .load('three.js/fonts/roboto_mono_bold_typeface.json', function(font) {
-
-      self.set('font', font);
-      self.set('initDone', true);
-      self.populateScene();
-      // import new view
-      self.importView();
-
-
-    });
-
+      .load('three.js/fonts/roboto_mono_bold_typeface.json', function (font) {
+        self.set('font', font);
+        self.set('initDone', true);
+        self.populateScene();
+        // import new view
+        self.importView();
+      });
   },
 
 
   initListener() {
-
     const self = this;
 
-    this.$(window).on('resize.visualization', function(){
+    this.$(window).on('resize.visualization', function () {
       const outerDiv = this.$('.viz')[0];
 
-      if(outerDiv) {
-
+      if (outerDiv) {
         const height = Math.round(this.$('.viz').height());
         const width = Math.round(this.$('.viz').width());
 
@@ -181,17 +173,17 @@ export default Component.extend(Evented, THREEPerformance, {
     });
 
 
-    this.get('viewImporter').on('transmitView', function(newState) {
-        self.set('newState', newState);
+    this.get('viewImporter').on('transmitView', function (newState) {
+      self.set('newState', newState);
     });
 
 
-    this.get('renderingService').on('reSetupScene', function() {
+    this.get('renderingService').on('reSetupScene', function () {
       self.onReSetupScene();
     });
 
 
-    this.get('urlBuilder').on('requestURL', function() {
+    this.get('urlBuilder').on('requestURL', function () {
       const state = {};
 
       // get timestamp
@@ -206,14 +198,14 @@ export default Component.extend(Evented, THREEPerformance, {
       state.camY = self.get('camera').position.y;
       state.camZ = self.get('camera').position.z;
 
-      if(state.appID){
-        self.set('appCondition',[]);
+      if (state.appID) {
+        self.set('appCondition', []);
         self.computeAppCondition(
           self.get('landscapeRepo.latestApplication').get('components'),
-          self.get('landscapeRepo.latestApplication').get('clazzes'));
+          self.get('landscapeRepo.latestApplication').get('clazzes')
+        );
         state.appCondition = self.get('appCondition');
-      }
-      else{
+      } else {
         state.landscapeCondition = self.computeLandscapeCondition();
       }
 
@@ -221,41 +213,36 @@ export default Component.extend(Evented, THREEPerformance, {
       self.get('urlBuilder').transmitState(state);
     });
 
-    this.get('landscapeRepo').on("updated", function() {
+    this.get('landscapeRepo').on('updated', function () {
       self.onUpdated();
     });
-
   },
 
   /*
    *  This method is used to collect data about the landscape.
    *  Ids of closed systems and nodegroups are stored in an array
    */
-  computeLandscapeCondition(){
-
+  computeLandscapeCondition() {
     const systems = this.get('landscapeRepo.latestLandscape').get('systems');
     const condition = [];
 
-    systems.forEach(function(system) {
-
+    systems.forEach(function (system) {
       let isRequestObject = false;
 
       // Find requests
-      if (!isRequestObject && system.get('name') === "Requests") {
+      if (!isRequestObject && system.get('name') === 'Requests') {
         isRequestObject = true;
       }
       // Exclude requests
-      if(!isRequestObject){
+      if (!isRequestObject) {
         // Handle closed systems and add id to array
-        if(!system.get('opened')){
+        if (!system.get('opened')) {
           condition.push(system.get('id'));
-        }
-        // Handle opened systems
-        else{
+        } else { // Handle opened systems
           // Handle closed nodegroups and add id to array
           const nodegroups = system.get('nodegroups');
-          nodegroups.forEach(function(nodegroup){
-            if(!nodegroup.get('opened')){
+          nodegroups.forEach(function (nodegroup) {
+            if (!nodegroup.get('opened')) {
               condition.push(nodegroup.get('id'));
             }
           });
@@ -271,26 +258,24 @@ export default Component.extend(Evented, THREEPerformance, {
    *  Furthermore the name+highlighted of the
    *  highlighted package is stored
    */
-  computeAppCondition(components, clazzes){
+  computeAppCondition(components, clazzes) {
     const self = this;
 
-    if(clazzes){
-      clazzes.forEach(function(clazz) {
-        if(clazz.get('highlighted')){
-          self.get('appCondition').push(clazz.get('name').concat("highlighted"));
+    if (clazzes) {
+      clazzes.forEach(function (clazz) {
+        if (clazz.get('highlighted')) {
+          self.get('appCondition').push(clazz.get('name').concat('highlighted'));
         }
       });
     }
 
-    components.forEach(function(component) {
+    components.forEach(function (component) {
       // Handle opened packages and add name to array
-      if(component.get('opened')){
+      if (component.get('opened')) {
         self.get('appCondition').push(component.get('name'));
         self.computeAppCondition(component.get('children'), component.get('clazzes'));
-      }
-      // Handle closed and highlighted packages
-      else if(component.get('highlighted')){
-        self.get('appCondition').push(component.get('name').concat("highlighted"));
+      } else if (component.get('highlighted')) { // Handle closed and highlighted packages
+        self.get('appCondition').push(component.get('name').concat('highlighted'));
       }
     });
   },
@@ -301,43 +286,38 @@ export default Component.extend(Evented, THREEPerformance, {
    *  and nodegroups. The array 'condition' contains the ids of
    *  of all closed systems and nodegroups
    */
-  applyLandscapeCondition(landscape){
-
+  applyLandscapeCondition(landscape) {
     const self = this;
 
     const systems = landscape.get('systems');
 
-    systems.forEach(function(system) {
+    systems.forEach(function (system) {
       let isRequestObject = false;
 
-      if (!isRequestObject && system.get('name') === "Requests") {
+      if (!isRequestObject && system.get('name') === 'Requests') {
         isRequestObject = true;
       }
 
-      if(!isRequestObject){
-
+      if (!isRequestObject) {
         // Open system
         system.setOpened(true);
         for (var i = 0; i < self.get('condition').length; i++) {
-
           // Close system if id is in condition
-          if(parseFloat(system.get('id')) === parseFloat(self.get('condition')[i])){
+          if (parseFloat(system.get('id')) === parseFloat(self.get('condition')[i])) {
             system.setOpened(false);
           }
         }
 
         // Check condition of nodegroups if system is opened
-        if(system.get('opened')){
+        if (system.get('opened')) {
           const nodegroups = system.get('nodegroups');
 
-          nodegroups.forEach(function(nodegroup) {
-
+          nodegroups.forEach(function (nodegroup) {
             // Open nodegroup
             nodegroup.setOpened(true);
             for (var i = 0; i < self.get('condition').length; i++) {
-
               // Close nodegroup if id is in condition
-              if(parseFloat(nodegroup.get('id')) === parseFloat(self.get('condition')[i])){
+              if (parseFloat(nodegroup.get('id')) === parseFloat(self.get('condition')[i])) {
                 nodegroup.setOpened(false);
               }
             }
@@ -347,50 +327,47 @@ export default Component.extend(Evented, THREEPerformance, {
     });
   },
 
-  applyAppCondition(application){
-
+  applyAppCondition(application) {
     const self = this;
 
-    if(application){
+    if (application) {
       let components = null;
-      if(self.get('initImport')){
+      if (self.get('initImport')) {
         components = application.get('components');
         self.set('initImport', false);
-      }
-      else{
+      } else {
         components = application.get('children');
       }
 
       const clazzes = application.get('clazzes');
 
-      if(clazzes){
-        clazzes.forEach(function(clazz) {
+      if (clazzes) {
+        clazzes.forEach(function (clazz) {
           // Look for highlighted clazzes
           for (var i = 0; i < self.get('condition').length; i++) {
-            if(clazz.get('name').concat("highlighted") === self.get('condition')[i]) {
-              clazz.set('highlighted',true);
+            if (clazz.get('name').concat('highlighted') === self.get('condition')[i]) {
+              clazz.set('highlighted', true);
             }
           }
         });
       }
 
-      if(components){
-        components.forEach(function(component) {
+      if (components) {
+        components.forEach(function (component) {
           // Close component
           component.setOpenedStatus(false);
           for (var i = 0; i < self.get('condition').length; i++) {
             // Open component if name is in condition
-            if(component.get('name') === self.get('condition')[i]){
+            if (component.get('name') === self.get('condition')[i]) {
               component.setOpenedStatus(true);
               self.applyAppCondition(component);
-            }
-            // case not opened => maybe highlighted
-            else if(component.get('name').concat("highlighted") === self.get('condition')[i]) {
-              component.set('highlighted',true);
+            } else if (component.get('name').concat('highlighted') === self.get('condition')[i]) {
+              // case not opened => maybe highlighted
+              component.set('highlighted', true);
             }
           }
         });
-      self.cleanAndUpdateScene();
+        self.cleanAndUpdateScene();
       }
     }
   },
@@ -398,67 +375,58 @@ export default Component.extend(Evented, THREEPerformance, {
   /**
     This method is used to update the camera with query parameters
   */
-  importView(){
-
+  importView() {
     const self = this;
 
     this.get('viewImporter').requestView();
 
-    const camX = this.get('newState').camX;
-    const camY = this.get('newState').camY;
-    const camZ = this.get('newState').camZ;
+    const { camX, camY, camZ } = this.get('newState');
 
     this.set('condition', this.get('newState').condition);
 
-    if(!isNaN(camX)){
+    if (!Number.isNaN(camX)) {
       this.get('camera').position.x = camX;
     }
-    if(!isNaN(camY)){
+    if (!Number.isNaN(camY)) {
       this.get('camera').position.y = camY;
     }
-    if(!isNaN(camZ)){
+    if (!Number.isNaN(camZ)) {
       this.get('camera').position.z = camZ;
     }
     this.get('camera').updateProjectionMatrix();
 
     // load actual landscape
-    const timestamp = this.get('newState').timestamp;
-    const appID = this.get('newState').appID;
+    const { timestamp, appID } = this.get('newState');
 
-    if(timestamp) {
+    if (timestamp) {
       self.get('reloadHandler').loadLandscapeById(timestamp, appID);
       waitForLandscape();
     }
 
-    self.set('initImport',true);
+    self.set('initImport', true);
 
     function waitForLandscape() {
       // New Promise
-      var promise = new Promise(
-        function(resolve) {
-          window.setTimeout(
-            function() {
-              // Wait until landscape is loaded
-              if(self.get('landscapeRepo.latestLandscape') === null){
-                waitForLandscape();
-              }
-              // Fulfill promise
-              else if(self.get('landscapeRepo.latestLandscape')){
-                resolve();
-              }
-            }, 500);
-        });
+      var promise = new Promise(function (resolve) {
+        window.setTimeout(function () {
+          // Wait until landscape is loaded
+          if (self.get('landscapeRepo.latestLandscape') === null) {
+            waitForLandscape();
+          } else if (self.get('landscapeRepo.latestLandscape')) {
+            // Fulfill promise
+            resolve();
+          }
+        }, 500);
+      });
       // Promise fulfilled => apply condition
-      promise.then(
-        function() {
-          self.get('reloadHandler').stopExchange();
-          if(appID){
-            self.applyAppCondition(self.get('landscapeRepo.latestApplication'));
-          }
-          else{
-            self.applyLandscapeCondition(self.get('landscapeRepo.latestLandscape'));
-          }
-        });
+      promise.then(function () {
+        self.get('reloadHandler').stopExchange();
+        if (appID) {
+          self.applyAppCondition(self.get('landscapeRepo.latestApplication'));
+        } else {
+          self.applyLandscapeCondition(self.get('landscapeRepo.latestLandscape'));
+        }
+      });
     }
   },
 
@@ -507,7 +475,6 @@ export default Component.extend(Evented, THREEPerformance, {
   },
 
 
-
   /**
    * Inherit this function to update the scene with a new renderingModel. It
    * automatically removes every mesh from the scene and finally calls
@@ -522,13 +489,13 @@ export default Component.extend(Evented, THREEPerformance, {
     removeAllChildren(scene);
 
     function removeAllChildren(entity) {
-      for (let i = entity.children.length - 1; i >= 0 ; i--) {
-        let child = entity.children[i];
+      for (let i = entity.children.length - 1; i >= 0; i--) {
+        const child = entity.children[i];
 
         removeAllChildren(child);
 
         if (child.type !== 'AmbientLight' && child.type !== 'SpotLight' && child.type !== 'DirectionalLight') {
-          if(child.type !== 'Object3D') {
+          if (child.type !== 'Object3D') {
             child.geometry.dispose();
             child.material.dispose();
           }
@@ -553,9 +520,6 @@ export default Component.extend(Evented, THREEPerformance, {
    * @method preProcessEntity
    */
   preProcessEntity() {},
-
-
-
 
 
   // Listener-Callbacks. Override in extending components

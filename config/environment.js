@@ -1,6 +1,8 @@
 /* jshint node: true */
 
-module.exports = function(environment) {
+'use strict';
+
+module.exports = function (environment) {
   var ENV = {
     modulePrefix: 'explorviz-frontend',
     environment: environment,
@@ -50,7 +52,6 @@ module.exports = function(environment) {
   if (environment === 'production') {
     ENV.rootURL = '/explorviz-frontend';
     ENV.APP.API_ROOT = '/explorviz-backend';
-
   }
 
   if (environment === 'akr') {

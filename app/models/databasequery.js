@@ -1,5 +1,5 @@
-import BaseEntity from './baseentity';
 import DS from 'ember-data';
+import BaseEntity from './baseentity';
 
 const { attr } = DS;
 
@@ -15,8 +15,8 @@ const { attr } = DS;
 export default BaseEntity.extend({
 
   timestamp: attr('number'),
-	sqlStatement: attr('string'),
-	returnValue: attr('string'),
-	responseTime: attr('number')
+  sqlStatement: attr('string'),
+  returnValue: attr('string'),
+  responseTime: attr('number')
 
 });

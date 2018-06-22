@@ -4,33 +4,31 @@ import { htmlSafe } from '@ember/string';
 
 export default Component.extend({
 
-  workingDirectory: computed('procezz.workingDirectory', function() {
-      const workingDirectory = this.get('procezz.workingDirectory');
+  workingDirectory: computed('procezz.workingDirectory', function () {
+    const workingDirectory = this.get('procezz.workingDirectory');
 
-      const fallbackString = '<font color="red"><b>ATTENTION</b></font>: ' + 
+    const fallbackString = '<font color="red"><b>ATTENTION</b></font>: ' +
         'Working Directory could not be found. Check if execution path looks ' +
         'valid.';
 
-      const htmlString = htmlSafe(fallbackString);
+    const htmlString = htmlSafe(fallbackString);
 
-      const decisionFlag = workingDirectory !== null && workingDirectory.length > 0;
+    const decisionFlag = workingDirectory !== null && workingDirectory.length > 0;
 
-      return decisionFlag ? workingDirectory : htmlString;
+    return decisionFlag ? workingDirectory : htmlString;
   }),
 
   actions: {
 
     setUserExec() {
-
       const proposedExec = this.get('procezz.proposedExecutionCommand');
-      const decisionMakerString = "Use-OS-Exec-CMD";
+      const decisionMakerString = 'Use-OS-Exec-CMD';
 
-      if(proposedExec === decisionMakerString) {
+      if (proposedExec === decisionMakerString) {
         this.get('procezz').set('userExecutionCommand', this.get('procezz.osExecutionCommand'));
       } else {
         this.get('procezz').set('userExecutionCommand', proposedExec);
       }
-
     }
   }
 });

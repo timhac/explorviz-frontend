@@ -1,5 +1,5 @@
 import Object from '@ember/object';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 
 export default Object.extend({
 
@@ -21,25 +21,22 @@ export default Object.extend({
   },
 
   saveTextForLabeling(textToShow, parent, color) {
-
     const emberModelName = parent.userData.model.constructor.modelName;
     const text = textToShow ? textToShow : parent.userData.model.get('name');
 
     let textCache = 'systemTextCache';
 
-    if(emberModelName === "node"){
+    if (emberModelName === 'node') {
       textCache = 'nodeTextCache';
-    }
-    else if(emberModelName === "application") {
+    } else if (emberModelName === 'application') {
       textCache = 'appTextCache';
     }
 
-    this.get(textCache).push({text: text, parent: parent, color: color});
+    this.get(textCache).push({ text: text, parent: parent, color: color });
   },
 
 
   drawTextLabels(font, configuration) {
-
     this.set('font', font);
     this.set('configuration', configuration);
 
@@ -51,30 +48,25 @@ export default Object.extend({
     this.set('systemTextCache', []);
     this.set('nodeTextCache', []);
     this.set('appTextCache', []);
-
   },
 
 
   drawSystemTextLabels() {
-
     const self = this;
 
     this.get('systemTextCache').forEach((textObj) => {
-
       const threejsModel = textObj.parent;
       const emberModel = threejsModel.userData.model;
 
       let labelMesh = this.isLabelAlreadyCreated(emberModel);
 
-      if(labelMesh && labelMesh.mesh) {
+      if (labelMesh && labelMesh.mesh) {
         // update meta-info for model
-        labelMesh.mesh.userData['model'] = emberModel;
-        threejsModel['label'] = labelMesh.mesh;
+        labelMesh.mesh.userData.model = emberModel;
+        threejsModel.label = labelMesh.mesh;
         threejsModel.add(labelMesh.mesh);
         labelMesh = labelMesh.mesh;
-
-      }
-      else {
+      } else {
         const labelGeo = new THREE.TextBufferGeometry(textObj.text, {
           font: self.get('font'),
           size: 0.4,
@@ -87,13 +79,12 @@ export default Object.extend({
 
         labelMesh = new THREE.Mesh(labelGeo, material);
 
-        labelMesh.userData['type'] = 'label';
-        labelMesh.userData['model'] = emberModel;
+        labelMesh.userData.type = 'label';
+        labelMesh.userData.model = emberModel;
 
-        self.get('textLabels')[emberModel.get('id')] =
-          {"mesh": labelMesh};
+        self.get('textLabels')[emberModel.get('id')] = { 'mesh': labelMesh };
 
-        threejsModel['label'] = labelMesh;
+        threejsModel.label = labelMesh;
         threejsModel.add(labelMesh);
       }
 
@@ -103,11 +94,9 @@ export default Object.extend({
 
 
   drawNodeTextLabels() {
-
     const self = this;
 
     this.get('nodeTextCache').forEach((textObj) => {
-
       const threejsModel = textObj.parent;
       const emberModel = threejsModel.userData.model;
 
@@ -115,16 +104,14 @@ export default Object.extend({
 
       const nodegroupstate = emberModel.get('parent.opened');
 
-      if(labelMesh && labelMesh.mesh &&
+      if (labelMesh && labelMesh.mesh &&
         labelMesh.nodegroupopenstate === nodegroupstate) {
         // update meta-info for model
-        labelMesh.mesh.userData['model'] = emberModel;
-        threejsModel['label'] = labelMesh.mesh;
+        labelMesh.mesh.userData.model = emberModel;
+        threejsModel.label = labelMesh.mesh;
         threejsModel.add(labelMesh.mesh);
         labelMesh = labelMesh.mesh;
-
-      }
-      else {
+      } else {
         const text = emberModel.getDisplayName();
         textObj.text = text;
 
@@ -140,13 +127,14 @@ export default Object.extend({
 
         labelMesh = new THREE.Mesh(labelGeo, material);
 
-        labelMesh.userData['type'] = 'label';
-        labelMesh.userData['model'] = emberModel;
+        labelMesh.userData.type = 'label';
+        labelMesh.userData.model = emberModel;
 
-        self.get('textLabels')[emberModel.get('id')] =
-          {"mesh": labelMesh, "nodegroupopenstate": emberModel.get('parent.opened')};
+        self.get('textLabels')[emberModel.get('id')] = {
+          'mesh': labelMesh, 'nodegroupopenstate': emberModel.get('parent.opened')
+        };
 
-        threejsModel['label'] = labelMesh;
+        threejsModel.label = labelMesh;
         threejsModel.add(labelMesh);
       }
 
@@ -155,27 +143,22 @@ export default Object.extend({
   },
 
 
-
   drawAppTextLabels() {
-
     const self = this;
 
     this.get('appTextCache').forEach((textObj) => {
-
       const threejsModel = textObj.parent;
       const emberModel = threejsModel.userData.model;
 
       let labelMesh = this.isLabelAlreadyCreated(emberModel);
 
-      if(labelMesh && labelMesh.mesh) {
+      if (labelMesh && labelMesh.mesh) {
         // update meta-info for model
-        labelMesh.mesh.userData['model'] = emberModel;
-        threejsModel['label'] = labelMesh.mesh;
+        labelMesh.mesh.userData.model = emberModel;
+        threejsModel.label = labelMesh.mesh;
         threejsModel.add(labelMesh.mesh);
         labelMesh = labelMesh.mesh;
-
-      }
-      else {
+      } else {
         const labelGeo = new THREE.TextBufferGeometry(textObj.text, {
           font: self.get('font'),
           size: 0.25,
@@ -188,15 +171,13 @@ export default Object.extend({
 
         labelMesh = new THREE.Mesh(labelGeo, material);
 
-        labelMesh.userData['type'] = 'label';
-        labelMesh.userData['model'] = emberModel;
+        labelMesh.userData.type = 'label';
+        labelMesh.userData.model = emberModel;
 
-        self.get('textLabels')[emberModel.get('id')] =
-          {"mesh": labelMesh};
+        self.get('textLabels')[emberModel.get('id')] = { 'mesh': labelMesh };
 
-        threejsModel['label'] = labelMesh;
+        threejsModel.label = labelMesh;
         threejsModel.add(labelMesh);
-
       }
 
       this.repositionAppLabel(labelMesh);
@@ -205,8 +186,7 @@ export default Object.extend({
 
 
   repositionSystemLabel(labelMesh) {
-
-    const parent = labelMesh.parent;
+    const { parent } = labelMesh;
 
     parent.geometry.computeBoundingBox();
     const bboxParent = parent.geometry.boundingBox;
@@ -219,16 +199,14 @@ export default Object.extend({
 
     const yOffset = 0.6;
 
-    labelMesh.position.x = - (labelLength / 2.0);
+    labelMesh.position.x = -(labelLength / 2.0);
     labelMesh.position.y = bboxParent.max.y - yOffset;
     labelMesh.position.z = parent.position.z + 0.001;
-
   },
 
 
   repositionNodeLabel(labelMesh) {
-
-    const parent = labelMesh.parent;
+    const { parent } = labelMesh;
 
     parent.geometry.computeBoundingBox();
     const bboxParent = parent.geometry.boundingBox;
@@ -241,16 +219,14 @@ export default Object.extend({
 
     const yOffset = 0.2;
 
-    labelMesh.position.x = - (labelLength / 2.0);
+    labelMesh.position.x = -(labelLength / 2.0);
     labelMesh.position.y = bboxParent.min.y + yOffset;
     labelMesh.position.z = parent.position.z + 0.001;
-
   },
 
 
   repositionAppLabel(labelMesh) {
-
-    const parent = labelMesh.parent;
+    const { parent } = labelMesh;
 
     parent.geometry.computeBoundingBox();
     const bboxParent = parent.geometry.boundingBox;
@@ -266,17 +242,13 @@ export default Object.extend({
     labelMesh.position.x = bboxParent.min.x + xOffset;
     labelMesh.position.y = -(labelHeight / 2.0);
     labelMesh.position.z = parent.position.z + 0.001;
-
   },
 
 
-
   isLabelAlreadyCreated(emberModel) {
-
     // label already created and color didn't change?
-    if(this.get('textLabels')[emberModel.get('id')] &&
+    if (this.get('textLabels')[emberModel.get('id')] &&
       !this.get('configuration.landscapeColors.textchanged')) {
-
       const oldTextLabelObj =
         this.get('textLabels')[emberModel.get('id')];
 
@@ -284,23 +256,20 @@ export default Object.extend({
     }
 
     return null;
-
   },
 
 
   findLongestTextLabel(labelStrings) {
-    let longestString = "";
+    let longestString = '';
 
-    labelStrings.map(function(obj){
-
-      if(obj.text.length >= longestString.length) {
-        //console.log(obj.text);
+    labelStrings.map(function (obj) {
+      if (obj.text.length >= longestString.length) {
+        // console.log(obj.text);
         longestString = obj.text;
       }
     });
 
     return longestString;
-
   }
 
 });

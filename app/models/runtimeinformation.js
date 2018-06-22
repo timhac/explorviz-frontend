@@ -14,7 +14,7 @@ const { attr } = DS;
  */
 export default BaseEntity.extend({
 
-  traceId: attr ('number'),
+  traceId: attr('number'),
   orderIndexes: attr(),
   requests: attr('number'),
   overallTraceDuration: attr('number'),

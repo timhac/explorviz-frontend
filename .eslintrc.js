@@ -32,7 +32,18 @@ module.exports = {
 	'prefer-rest-params': 0,
 	'prefer-spread': 0,
 	'func-names': 0,
-	'no-underscore-dangle': 0
+	'no-underscore-dangle': 0,
+	'quote-props': 0,
+	'no-bitwise': 0,
+	'ember/avoid-leaking-state-in-ember-objects': 0,
+	'global-require': 0,
+	'linebreak-style': 0,
+	'valid-typeof': 0,
+	'no-unneeded-ternary': 0,
+	'array-callback-return': 0,
+	'consistent-return': 0,
+	'import/prefer-default-export': 0,
+	
 	
   },
   overrides: [

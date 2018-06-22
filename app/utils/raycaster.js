@@ -1,5 +1,5 @@
 import Object from '@ember/object';
-import THREE from "npm:three";
+import THREE from 'npm:three';
 
 export default Object.extend({
 
@@ -20,7 +20,6 @@ export default Object.extend({
 
 
   raycasting(origin, direction, camera, possibleObjects) {
-
     const self = this;
     const raycaster = this.get('raycaster');
 
@@ -33,23 +32,21 @@ export default Object.extend({
     }
 
     // calculate objects intersecting the picking ray (true => recursive)
-    const intersections = raycaster.intersectObjects(possibleObjects,
-      true);
+    const intersections = raycaster.intersectObjects(possibleObjects, true);
 
     if (intersections.length > 0) {
-
-      const result = intersections.filter(function(obj) {
+      const result = intersections.filter(function (obj) {
         if (obj.object.userData.model) {
-          const modelName = obj.object.userData.model.constructor.modelName;
+          const { modelName } = obj.object.userData.model.constructor;
           return self.get(self.get('objectCatalog')).includes(modelName);
         }
       });
       if (result.length <= 0) {
-        return;
+        return null;
       }
       return result[0];
-
     }
+    return null;
   }
 
 });

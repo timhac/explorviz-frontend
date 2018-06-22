@@ -1,14 +1,14 @@
-import BaseModel from './base-model';
 import DS from 'ember-data';
+import BaseModel from './base-model';
 
 const { attr, belongsTo } = DS;
 
 /**
-* Ember model for a Process. This model is used as an abstraction for 
-* distributed processes. 
-* 
+* Ember model for a Process. This model is used as an abstraction for
+* distributed processes.
+*
 * TODO more description
-* 
+*
 * @class Process-Model
 * @extends BaseModel
 *
@@ -17,30 +17,28 @@ const { attr, belongsTo } = DS;
 */
 export default BaseModel.extend({
 
-  pid: attr("number"),
+  pid: attr('number'),
 
-  osExecutionCommand: attr("string"),  
-  agentExecutionCommand: attr("string"),
-  proposedExecutionCommand: attr("string"),
-  workingDirectory: attr("string"),
-  programmingLanguage: attr("string"),
+  osExecutionCommand: attr('string'),
+  agentExecutionCommand: attr('string'),
+  proposedExecutionCommand: attr('string'),
+  workingDirectory: attr('string'),
+  programmingLanguage: attr('string'),
 
-  agent: belongsTo("agent"),
+  agent: belongsTo('agent'),
 
   // the following attribute can be changed by users
 
-  userExecutionCommand: attr("string"),
-  shutdownCommand: attr("string"),
+  userExecutionCommand: attr('string'),
+  shutdownCommand: attr('string'),
 
-  monitoredFlag: attr("boolean"),
-  webserverFlag: attr("boolean"),  
+  monitoredFlag: attr('boolean'),
+  webserverFlag: attr('boolean'),
 
-  stopped: attr("boolean"),
-  restart: attr("boolean"),
+  stopped: attr('boolean'),
+  restart: attr('boolean'),
 
-  aopContent: attr("string"),
-  kiekerConfigContent: attr("string")
-
-  
+  aopContent: attr('string'),
+  kiekerConfigContent: attr('string')
 
 });

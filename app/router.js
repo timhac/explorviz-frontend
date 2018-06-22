@@ -1,5 +1,5 @@
-import config from './config/environment';
 import EmberRouter from '@ember/routing/router';
+import config from './config/environment';
 
 
 /**
@@ -15,12 +15,12 @@ const Router = EmberRouter.extend({
   rootURL: config.rootURL
 });
 
-Router.map(function() {
+Router.map(function () {
   this.route('visualization');
   this.route('tutorial');
   this.route('administration');
   this.route('login');
-  this.route('badroute', { path: "/*path" });
+  this.route('badroute', { path: '/*path' });
   this.route('configuration');
   this.route('base-route');
   this.route('discovery');
