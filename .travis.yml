@@ -29,7 +29,3 @@ after_success:
   - .travis/push.sh
   
 env:
-
-branches:
-  only:
-  - master
