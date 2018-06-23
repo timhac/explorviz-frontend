@@ -11,6 +11,7 @@
   },
   "repository": "",
   "scripts": {
+  	"lint": "eslint --ignore-path .eslintignore .",
     "build": "ember build",
     "start": "ember server",
     "test": "ember test"

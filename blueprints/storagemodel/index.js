@@ -2,7 +2,7 @@
 module.exports = {
   description: 'This blueprint will make it able to define storage classes.',
 
-  fileMapTokens: function (options) {
+  fileMapTokens: function (options) { // eslint-disable-line no-unused-vars
     return {
       __StorageModel__: function (options) {
         return options.dasherizedModuleName;
