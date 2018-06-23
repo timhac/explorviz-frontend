@@ -39,8 +39,7 @@ export default Component.extend({
 
     const firstMatch = possibleGlobalCandidates.find(candidate => latestApp.contains(candidate));
 
-    if (!firstMatch ||
-      this.get('highlighter.highlightedEntity') === firstMatch) {
+    if (!firstMatch || this.get('highlighter.highlightedEntity') === firstMatch) {
       return;
     }
 

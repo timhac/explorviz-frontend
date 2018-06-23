@@ -214,11 +214,11 @@ export default Object.extend(Evented, AlertifyHandler, {
   handleDoubleClick(mouse) {
     const origin = {};
 
-    origin.x = (((mouse.x - (this.get('renderer').domElement.offsetLeft + 0.66)) /
-      this.get('renderer').domElement.clientWidth) * 2) - 1;
+    origin.x = (((mouse.x - (this.get('renderer').domElement.offsetLeft + 0.66))
+      / this.get('renderer').domElement.clientWidth) * 2) - 1;
 
-    origin.y = (-((mouse.y - (this.get('renderer').domElement.offsetTop + 0.665)) /
-      this.get('renderer').domElement.clientHeight) * 2) + 1;
+    origin.y = (-((mouse.y - (this.get('renderer').domElement.offsetTop + 0.665))
+      / this.get('renderer').domElement.clientHeight) * 2) + 1;
 
     const intersectedViewObj = this.get('raycaster').raycasting(
       null, origin,
@@ -259,11 +259,11 @@ export default Object.extend(Evented, AlertifyHandler, {
     if (event.button === 1) {
       // translate camera
 
-      var distanceXInPercent = (delta.x /
-      parseFloat(this.get('renderer').domElement.clientWidth)) * 100.0;
+      var distanceXInPercent = (delta.x
+        / parseFloat(this.get('renderer').domElement.clientWidth)) * 100.0;
 
-      var distanceYInPercent = (delta.y /
-        parseFloat(this.get('renderer').domElement.clientHeight)) * 100.0;
+      var distanceYInPercent = (delta.y
+        / parseFloat(this.get('renderer').domElement.clientHeight)) * 100.0;
 
       var xVal = this.get('camera').position.x + (((distanceXInPercent * 6.0) * 0.015) * -(Math.abs(this.get('camera').position.z) / 4.0));
 
@@ -283,11 +283,11 @@ export default Object.extend(Evented, AlertifyHandler, {
 
     const origin = {};
 
-    origin.x = (((mouse.x - (this.get('renderer').domElement.offsetLeft + 0.66)) /
-      this.get('renderer').domElement.clientWidth) * 2) - 1;
+    origin.x = (((mouse.x - (this.get('renderer').domElement.offsetLeft + 0.66))
+      / this.get('renderer').domElement.clientWidth) * 2) - 1;
 
-    origin.y = (-((mouse.y - (this.get('renderer').domElement.offsetTop + 0.665)) /
-      this.get('renderer').domElement.clientHeight) * 2) + 1;
+    origin.y = (-((mouse.y - (this.get('renderer').domElement.offsetTop + 0.665))
+      / this.get('renderer').domElement.clientHeight) * 2) + 1;
 
     const intersectedViewObj = this.get('raycaster').raycasting(
       null, origin,

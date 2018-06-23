@@ -3,8 +3,7 @@ import $ from 'jquery';
 export function initialize(appInstance) {
   const config = appInstance.resolveRegistration('config:environment');
 
-  if (config.environment !== 'production' &&
-    config.environment !== 'development') {
+  if (config.environment !== 'production' && config.environment !== 'development') {
     return;
   }
 

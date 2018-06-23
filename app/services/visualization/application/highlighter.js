@@ -34,15 +34,14 @@ export default Service.extend({
     const highlightedNode = this.get('highlightedEntity');
 
     if (highlightedNode != null) {
-      const communicationsAccumulated =
-        this.get('landscapeRepo.latestApplication')
-          .get('communicationsAccumulated');
+      const communicationsAccumulated = this.get('landscapeRepo.latestApplication')
+        .get('communicationsAccumulated');
 
       communicationsAccumulated.forEach((commu) => {
-        if ((commu.source != null && commu.source.get('fullQualifiedName') ===
-          highlightedNode.get('fullQualifiedName')) ||
-          (commu.target != null && commu.target.get('fullQualifiedName') ===
-            highlightedNode.get('fullQualifiedName'))) {
+        if ((commu.source != null && commu.source.get('fullQualifiedName')
+          === highlightedNode.get('fullQualifiedName'))
+          || (commu.target != null && commu.target.get('fullQualifiedName')
+            === highlightedNode.get('fullQualifiedName'))) {
           // let outgoing = determineOutgoing(commu);
           // let incoming = determineIncoming(commu);
 

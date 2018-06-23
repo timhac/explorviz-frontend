@@ -23,8 +23,7 @@ export default Object.extend({
 
   resetHoverEffect() {
     if (this.get('hoveredEntityColorObj')) {
-      this.get('hoveredEntityColorObj').entity.material.color =
-        this.get('hoveredEntityColorObj').color;
+      this.get('hoveredEntityColorObj').entity.material.color = this.get('hoveredEntityColorObj').color;
 
       this.set('hoveredEntityColorObj', null);
     }
@@ -41,8 +40,7 @@ export default Object.extend({
     const newHoverEntity = raycastTarget.object;
 
     // same object, do nothing and return
-    if (this.get('hoveredEntityColorObj') &&
-      this.get('hoveredEntityColorObj').entity === newHoverEntity) {
+    if (this.get('hoveredEntityColorObj') && this.get('hoveredEntityColorObj').entity === newHoverEntity) {
       return;
     }
 
@@ -74,12 +72,11 @@ export default Object.extend({
     const highlightedNode = this.get('highlightedEntity');
 
     if (highlightedNode != null) {
-      const outgoingClazzCommunications =
-        this.get('application').get('cumulatedClazzCommunications');
+      const outgoingClazzCommunications = this.get('application').get('cumulatedClazzCommunications');
 
       outgoingClazzCommunications.forEach((clazzCommunication) => {
-        if ((clazzCommunication.sourceClazz != null && clazzCommunication.get('sourceClazz').get('fullQualifiedName') === highlightedNode.get('fullQualifiedName')) ||
-          (clazzCommunication.targetClazz != null && clazzCommunication.get('targetClazz').get('fullQualifiedName') === highlightedNode.get('fullQualifiedName'))) {
+        if ((clazzCommunication.sourceClazz != null && clazzCommunication.get('sourceClazz').get('fullQualifiedName') === highlightedNode.get('fullQualifiedName'))
+          || (clazzCommunication.targetClazz != null && clazzCommunication.get('targetClazz').get('fullQualifiedName') === highlightedNode.get('fullQualifiedName'))) {
           clazzCommunication.set('state', 'NORMAL');
         } else {
           clazzCommunication.set('state', 'TRANSPARENT');

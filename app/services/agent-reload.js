@@ -46,8 +46,7 @@ export default Reload.extend(AlertifyHandler, {
     }
 
     function failure(e) {
-      self.showAlertifyMessage('Agents couldn\'t be requested!' +
-        ' Backend offline?');
+      self.showAlertifyMessage('Agents couldn\'t be requested! Backend offline?');
       self.debug('Agents couldn\'t be requested!', e);
     }
 

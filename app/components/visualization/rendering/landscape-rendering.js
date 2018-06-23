@@ -162,8 +162,7 @@ export default RenderingCore.extend({
 
 
     // create plus or minus, if not already done
-    if (!(this.get('openSymbol') && this.get('closeSymbol')) &&
-      this.get('font')) {
+    if (!(this.get('openSymbol') && this.get('closeSymbol')) && this.get('font')) {
       createCollapseSymbols();
     }
 
@@ -209,8 +208,7 @@ export default RenderingCore.extend({
           self.get('scene').add(systemMesh);
           system.set('threeJSModel', systemMesh);
 
-          const textColor =
-            self.get('configuration.landscapeColors.textsystem');
+          const textColor = self.get('configuration.landscapeColors.textsystem');
 
           self.get('labeler').saveTextForLabeling(null, systemMesh, textColor);
 
@@ -302,8 +300,7 @@ export default RenderingCore.extend({
               centerY = (node.get('positionY') - extensionY) - centerPoint.y;
 
               nodeMesh = createPlane(node);
-              nodeMesh.position.set(centerX, centerY, node.get('positionZ') +
-                0.002);
+              nodeMesh.position.set(centerX, centerY, node.get('positionZ') + 0.002);
 
               self.get('scene').add(nodeMesh);
               node.set('threeJSModel', nodeMesh);
@@ -348,9 +345,8 @@ export default RenderingCore.extend({
 
                 logoPos.x = appBBox.max.x - logoRightPadding;
 
-                const texturePartialPath = application.get('database') ?
-                  'database2' : application.get('programmingLanguage')
-                    .toLowerCase();
+                const texturePartialPath = application.get('database')
+                  ? 'database2' : application.get('programmingLanguage').toLowerCase();
 
                 self.get('imageLoader').createPicture(
                   logoPos.x, logoPos.y,
@@ -360,8 +356,7 @@ export default RenderingCore.extend({
 
                 // create text labels
 
-                let textColor =
-                  self.get('configuration.landscapeColors.textapp');
+                let textColor = self.get('configuration.landscapeColors.textapp');
 
                 self.get('labeler').saveTextForLabeling(null, applicationMesh, textColor);
 
@@ -469,8 +464,8 @@ export default RenderingCore.extend({
 
     // This function is only neccessary to find the right index
     function isSameTile(tile) {
-      return checkEqualityOfPoints(this.endPoint, tile.endPoint) &&
-        checkEqualityOfPoints(this.startPoint, tile.startPoint);
+      return checkEqualityOfPoints(this.endPoint, tile.endPoint)
+        && checkEqualityOfPoints(this.startPoint, tile.startPoint);
     }
 
     /*
@@ -533,13 +528,15 @@ export default RenderingCore.extend({
           value = parseInt(value);
           if (value === 0) {
             return 0.0;
-          } else if (value === 1) {
+          }
+          if (value === 1) {
             return 1.0;
           }
 
           if (value <= t1) {
             return 2.0;
-          } else if (value <= t2) {
+          }
+          if (value <= t2) {
             return 3.0;
           }
           return 4.0;
@@ -629,8 +626,8 @@ export default RenderingCore.extend({
       // New line approach (draw planes)
 
       // Euclidean distance
-      const lengthPlane = Math.sqrt(((firstVector.x - secondVector.x) ** 2) +
-        ((firstVector.y - secondVector.y) ** 2));
+      const lengthPlane = Math.sqrt(((firstVector.x - secondVector.x) ** 2)
+        + ((firstVector.y - secondVector.y) ** 2));
 
       const geometryPlane = new THREE.PlaneGeometry(lengthPlane, tile.lineThickness * 0.4);
 

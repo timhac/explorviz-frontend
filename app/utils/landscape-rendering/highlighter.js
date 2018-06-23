@@ -13,8 +13,7 @@ export default Object.extend({
 
   resetHoverEffect() {
     if (this.get('hoveredEntityColorObj')) {
-      this.get('hoveredEntityColorObj').entity.material.color =
-        this.get('hoveredEntityColorObj').color;
+      this.get('hoveredEntityColorObj').entity.material.color = this.get('hoveredEntityColorObj').color;
 
       this.set('hoveredEntityColorObj', null);
     }
@@ -31,8 +30,7 @@ export default Object.extend({
     const newHoverEntity = raycastTarget.object;
 
     // same object, do nothing and return
-    if (this.get('hoveredEntityColorObj') &&
-      this.get('hoveredEntityColorObj').entity === newHoverEntity) {
+    if (this.get('hoveredEntityColorObj') && this.get('hoveredEntityColorObj').entity === newHoverEntity) {
       return;
     }
 

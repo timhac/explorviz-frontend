@@ -52,8 +52,7 @@ export default Service.extend(AlertifyHandler, Evented, {
 
     function failure(e) {
       self.set('landscapeRepo.latestLandscape', undefined);
-      self.showAlertifyMessage('Landscape couldn\'t be requested!' +
-        ' Backend offline?');
+      self.showAlertifyMessage('Landscape couldn\'t be requested! Backend offline?');
       self.debug('Landscape couldn\'t be requested!', e);
     }
 
@@ -85,8 +84,7 @@ export default Service.extend(AlertifyHandler, Evented, {
 
     function failure(e) {
       self.set('landscapeRepo.replayLandscape', undefined);
-      self.showAlertifyMessage('Uploaded landscape couldn\'t be requested!' +
-        ' Backend offline?');
+      self.showAlertifyMessage('Uploaded landscape couldn\'t be requested! Backend offline?');
       self.debug('Uploaded landscape couldn\'t be requested!', e);
     }
 

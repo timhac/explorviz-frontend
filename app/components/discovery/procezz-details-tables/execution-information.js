@@ -7,9 +7,9 @@ export default Component.extend({
   workingDirectory: computed('procezz.workingDirectory', function () {
     const workingDirectory = this.get('procezz.workingDirectory');
 
-    const fallbackString = '<font color="red"><b>ATTENTION</b></font>: ' +
-        'Working Directory could not be found. Check if execution path looks ' +
-        'valid.';
+    const fallbackString = '<font color="red"><b>ATTENTION</b></font>: '
+      + 'Working Directory could not be found. Check if execution path looks '
+      + 'valid.';
 
     const htmlString = htmlSafe(fallbackString);
 

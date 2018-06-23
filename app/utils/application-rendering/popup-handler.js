@@ -69,19 +69,18 @@ export default Object.extend(Evented, {
       const clazzesCount = getClazzesCount(component);
       const packageCount = getPackagesCount(component);
 
-      content.html =
-        '<table style="width:100%">' +
-        '<tr>' +
-        '<td>Contained Classes:</td>' +
-        `<td style="text-align:right;padding-left:10px;">${clazzesCount}` +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Contained Packages:</td>' +
-        `<td style="text-align:right;padding-left:10px;">${packageCount}` +
-        '</td>' +
-        '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>Contained Classes:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${clazzesCount}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Contained Packages:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${packageCount}`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       function getClazzesCount(component) {
         let result = component.get('clazzes').get('length');
@@ -118,19 +117,18 @@ export default Object.extend(Evented, {
 
       const calledOperations = getCalledOperations(clazz);
 
-      content.html =
-        '<table style="width:100%">' +
-        '<tr>' +
-        '<td>Active Instances:</td>' +
-        `<td style="text-align:right;padding-left:10px;">${clazz.get('instanceCount')}` +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Called Operations:</td>' +
-        `<td style="text-align:right;padding-left:10px;">${calledOperations}` +
-        '</td>' +
-        '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>Active Instances:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${clazz.get('instanceCount')}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Called Operations:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${calledOperations}`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
 
@@ -165,34 +163,33 @@ export default Object.extend(Evented, {
         commDirectionString = "&nbsp;<span class='glyphicon glyphicon-transfer'></span>&nbsp;";
       }
 
-      content.title = encodeStringForPopUp(sourceClazzName) + commDirectionString +
-        encodeStringForPopUp(targetClazzName);
+      content.title = encodeStringForPopUp(sourceClazzName) + commDirectionString
+        + encodeStringForPopUp(targetClazzName);
 
-      content.html =
-        '<table style="width:100%">' +
-        '<tr>' +
-        '<td>&nbsp;<span class=\'glyphicon glyphicon-tasks\'></span>&nbsp; Requests:</td>' +
-        `<td style="text-align:right;padding-left:10px;">${cumulatedClazzCommunication.get('requests')}` +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>&nbsp;<span class=\'glyphicon glyphicon-triangle-right\'></span>&nbsp; Involved Traces :</td>' +
-        `<td style="text-align:right;padding-left:10px;">${runtimeStats.involvedTraces.length}` +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Response Time:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        `${avgAverageResponseTime} ms` +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Duration:</td>' +
-        '<td style="text-align:right;padding-left:10px;">' +
-        `${avgOverallTraceDuration} ms` +
-        '</td>' +
-        '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-tasks\'></span>&nbsp; Requests:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${cumulatedClazzCommunication.get('requests')}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-triangle-right\'></span>&nbsp; Involved Traces :</td>'
+        + `<td style="text-align:right;padding-left:10px;">${runtimeStats.involvedTraces.length}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Response Time:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${avgAverageResponseTime} ms`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Duration:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${avgOverallTraceDuration} ms`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
 
@@ -232,10 +229,10 @@ export default Object.extend(Evented, {
         });
 
         if (runtimeInformationCounter > 0) {
-          runtimeStats.avgAverageResponseTime =
-            runtimeStats.totalAverageResponseTime / runtimeInformationCounter;
-          runtimeStats.avgOverallTraceDuration =
-            runtimeStats.totalOverallTraceDuration / runtimeInformationCounter;
+          runtimeStats.avgAverageResponseTime = runtimeStats.totalAverageResponseTime
+            / runtimeInformationCounter;
+          runtimeStats.avgOverallTraceDuration = runtimeStats.totalOverallTraceDuration
+            / runtimeInformationCounter;
         }
 
         return runtimeStats;

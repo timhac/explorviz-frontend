@@ -46,8 +46,7 @@ export default Reload.extend(AlertifyHandler, {
     }
 
     function failure(e) {
-      self.showAlertifyMessage('Landscape couldn\'t be requested!' +
-        ' Backend offline?');
+      self.showAlertifyMessage('Landscape couldn\'t be requested! Backend offline?');
       self.debug('Landscape couldn\'t be requested!', e);
     }
 

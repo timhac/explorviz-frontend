@@ -280,11 +280,10 @@ export default Component.extend({
     const dataSetLength = allData.length;
 
     const divWidth = this.get('plot').element.clientWidth;
-    const numberOfPointsToShow = parseInt(divWidth /
-      this.get('dataPointPixelRatio'));
+    const numberOfPointsToShow = parseInt(divWidth / this.get('dataPointPixelRatio'));
 
-    const lowerBound = dataSetLength - numberOfPointsToShow <= 0 ?
-      0 : (dataSetLength - numberOfPointsToShow);
+    const lowerBound = dataSetLength - numberOfPointsToShow <= 0
+      ? 0 : (dataSetLength - numberOfPointsToShow);
 
     const lowerBoundLabel = allData[lowerBound].x;
     const upperBoundLabel = allData[dataSetLength - 1].x;

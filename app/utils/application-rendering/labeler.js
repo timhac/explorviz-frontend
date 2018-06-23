@@ -39,8 +39,7 @@ export default Object.extend({
     const oldLabel = this.get('labels').filter(function (label) {
       const data = label.userData;
 
-      return data.name === parentMesh.userData.name &&
-      label.userData.parentPos.equals(worldParent);
+      return data.name === parentMesh.userData.name && label.userData.parentPos.equals(worldParent);
     });
 
     // check if TextGeometry already exists

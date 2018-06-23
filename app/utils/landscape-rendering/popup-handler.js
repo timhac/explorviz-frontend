@@ -77,19 +77,18 @@ export default Object.extend(Evented, {
 
       const year = new Date(application.get('lastUsage')).toLocaleString();
 
-      content.html =
-        '<table style="width:100%">' +
-          '<tr>' +
-            '<td>Last Usage:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${year}` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>Language:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${application.get('programmingLanguage')}` +
-            '</td>' +
-          '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>Last Usage:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${year}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Language:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${application.get('programmingLanguage')}`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
     }
@@ -117,19 +116,18 @@ export default Object.extend(Evented, {
       });
 
 
-      content.html =
-        '<table style="width:100%">' +
-          '<tr>' +
-            '<td>Nodes:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${nodesCount}` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>Applications:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${applicationCount}` +
-            '</td>' +
-          '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>Nodes:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${nodesCount}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Applications:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${applicationCount}`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
     }
@@ -150,27 +148,26 @@ export default Object.extend(Evented, {
       var freeRAM = round(node.get('freeRAM') / formatFactor, 2).toFixed(2);
       var totalRAM = round((node.get('usedRAM') + node.get('freeRAM')) / formatFactor, 2).toFixed(2);
 
-      content.html =
-        '<table style="width:100%">' +
-          '<tr>' +
-            '<td>CPU Utilization:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-            `${cpuUtilization} %` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>Free RAM:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-            `${freeRAM} GB` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>Total RAM:</td>' +
-              '<td style="text-align:right;padding-left:10px;">' +
-              `${totalRAM} GB` +
-            '</td>' +
-          '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>CPU Utilization:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${cpuUtilization} %`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Free RAM:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${freeRAM} GB`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Total RAM:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${totalRAM} GB`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
     }
@@ -194,25 +191,24 @@ export default Object.extend(Evented, {
 
       var avgCpuUtilization = round((avgNodeCPUUtil * 100) / nodes.get('length'), 0);
 
-      content.html =
-        '<table style="width:100%">' +
-          '<tr>' +
-            '<td>Nodes:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${nodes.get('length')}` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>Applications:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${applicationCount}` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>Avg. CPU Utilization:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-            `${avgCpuUtilization} %` +
-            '</td>' +
-          '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>Nodes:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${nodes.get('length')}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Applications:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${applicationCount}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>Avg. CPU Utilization:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${avgCpuUtilization} %`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
     }
@@ -224,28 +220,27 @@ export default Object.extend(Evented, {
       const sourceApplicationName = applicationCommunication.get('sourceApplication').get('name');
       const targetApplicationName = applicationCommunication.get('targetApplication').get('name');
 
-      content.title =
-        `${encodeStringForPopUp(sourceApplicationName)}&nbsp;<span class='glyphicon glyphicon-arrow-right'></span>&nbsp;${encodeStringForPopUp(targetApplicationName)}`;
+      content.title = `${encodeStringForPopUp(sourceApplicationName)}&nbsp;
+      <span class='glyphicon glyphicon-arrow-right'></span>&nbsp;${encodeStringForPopUp(targetApplicationName)}`;
 
-      content.html =
-        '<table style="width:100%">' +
-          '<tr>' +
-            '<td>&nbsp;<span class=\'glyphicon glyphicon-tasks\'></span>&nbsp; Requests:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${applicationCommunication.get('requests')}` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>&nbsp;<span class=\'glyphicon glyphicon-oil\'></span>&nbsp;Technology:</td>' +
-            `<td style="text-align:right;padding-left:10px;">${applicationCommunication.get('technology')}` +
-            '</td>' +
-          '</tr>' +
-          '<tr>' +
-            '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Duration:</td>' +
-            '<td style="text-align:right;padding-left:10px;">' +
-            `${applicationCommunication.get('averageResponseTime')} ns` +
-            '</td>' +
-          '</tr>' +
-        '</table>';
+      content.html = '<table style="width:100%">'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-tasks\'></span>&nbsp; Requests:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${applicationCommunication.get('requests')}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-oil\'></span>&nbsp;Technology:</td>'
+        + `<td style="text-align:right;padding-left:10px;">${applicationCommunication.get('technology')}`
+        + '</td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td>&nbsp;<span class=\'glyphicon glyphicon-time\'></span>&nbsp; Avg. Duration:</td>'
+        + '<td style="text-align:right;padding-left:10px;">'
+        + `${applicationCommunication.get('averageResponseTime')} ns`
+        + '</td>'
+        + '</tr>'
+        + '</table>';
 
       return content;
     }

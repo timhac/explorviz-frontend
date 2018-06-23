@@ -145,8 +145,8 @@ export default Object.extend(Evented, {
           var storeIndex = store.findIndex(isCorrectPointerId);
 
           // start and mouse must be down
-          if (eventType & Hammer.INPUT_START &&
-            (ev.button === 0 || ev.button === 1 || ev.button === 2)) {
+          if (eventType & Hammer.INPUT_START
+            && (ev.button === 0 || ev.button === 1 || ev.button === 2)) {
             if (storeIndex < 0) {
               store.push(ev);
               storeIndex = store.length - 1;

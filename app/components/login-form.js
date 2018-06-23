@@ -26,8 +26,7 @@ export default Component.extend({
     authenticate() {
       const self = this;
 
-      const { identification, password } =
-        this.getProperties('identification', 'password');
+      const { identification, password } = this.getProperties('identification', 'password');
 
       // reset (possible) old lables
       if (this.get('session.session') && this.get('session.session.messages')) {
@@ -59,8 +58,8 @@ export default Component.extend({
 
         let errorMessage = 'No connection to backend';
 
-        if (backendResponse && backendResponse.status && backendResponse.title &&
-          backendResponse.detail) {
+        if (backendResponse && backendResponse.status && backendResponse.title
+          && backendResponse.detail) {
           errorMessage = `${backendResponse.status}: ${backendResponse.title} / 
             ${backendResponse.detail}`;
         }
@@ -71,11 +70,11 @@ export default Component.extend({
   },
 
   checkForValidInput(username, password) {
-    const usernameValid = username !== '' && username !== null &&
-      username !== undefined;
+    const usernameValid = username !== '' && username !== null
+      && username !== undefined;
 
-    const passwordValid = password !== '' && password !== null &&
-      password !== undefined;
+    const passwordValid = password !== '' && password !== null
+      && password !== undefined;
 
     return usernameValid && passwordValid;
   }

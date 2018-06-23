@@ -48,8 +48,7 @@ export default Reload.extend(AlertifyHandler, {
     }
 
     function failure(e) {
-      self.showAlertifyMessage('Timestamps couldn\'t be requested!' +
-        ' Backend offline?');
+      self.showAlertifyMessage('Timestamps couldn\'t be requested! Backend offline?');
       self.debug('Timestamps couldn\'t be requested!', e);
     }
 

@@ -46,8 +46,7 @@ export default Controller.extend(AlertifyHandler, {
         errorDetail = errorObject.detail ? errorObject.detail : errorDetail;
       }
 
-      const alertifyMessage =
-        `<b><font color="black">${errorTitle}</font></b>
+      const alertifyMessage = `<b><font color="black">${errorTitle}</font></b>
         ${errorDetail} Your Modification is discarded.`;
 
       this.showAlertifyMessageWithDuration(alertifyMessage, 8);

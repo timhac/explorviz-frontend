@@ -33,8 +33,7 @@ export default Service.extend(AlertifyHandler, {
     }
 
     function failure(e) {
-      self.showAlertifyMessage('Uploaded timestamps couldn\'t be requested!' +
-        ' Backend offline?');
+      self.showAlertifyMessage('Uploaded timestamps couldn\'t be requested! Backend offline?');
       self.debug('Uploaded timestamps couldn\'t be requested!', e);
     }
 

@@ -258,17 +258,13 @@ export default Component.extend(AlertifyHandler, {
 
       const faultyAgent = agentRecord.get('errorOccured');
 
-      let cssClassAgent = faultyAgent ?
-        'agent-error' : 'agent';
+      let cssClassAgent = faultyAgent ? 'agent-error' : 'agent';
 
-      cssClassAgent = agentHidden ?
-        `hidden ${cssClassAgent}` : cssClassAgent;
+      cssClassAgent = agentHidden ? `hidden ${cssClassAgent}` : cssClassAgent;
 
-      let cssClassAgentEdge = faultyAgent ?
-        'edge-error' : 'edge';
+      let cssClassAgentEdge = faultyAgent ? 'edge-error' : 'edge';
 
-      cssClassAgentEdge = agentHidden ?
-        `hidden ${cssClassAgentEdge}` : cssClassAgentEdge;
+      cssClassAgentEdge = agentHidden ? `hidden ${cssClassAgentEdge}` : cssClassAgentEdge;
 
       const agentAndEdge = {
         nodes: [

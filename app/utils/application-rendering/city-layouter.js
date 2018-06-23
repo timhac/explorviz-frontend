@@ -152,13 +152,15 @@ export default function applyCityLayout(application) {
     function getCategoryFromValues(value, t1, t2) {
       if (value === 0) {
         return 0.0;
-      } else if (value === 1) {
+      }
+      if (value === 1) {
         return 1.0;
       }
 
       if (value <= t1) {
         return 2.0;
-      } else if (value <= t2) {
+      }
+      if (value <= t2) {
         return 3.0;
       }
       return 4.0;
@@ -192,11 +194,14 @@ export default function applyCityLayout(application) {
     function getCategoryFromLinearValues(value, t1, t2, t3) {
       if (value <= 0) {
         return 0;
-      } else if (value <= t1) {
+      }
+      if (value <= t1) {
         return 1.5;
-      } else if (value <= t2) {
+      }
+      if (value <= t2) {
         return 2.5;
-      } else if (value <= t3) {
+      }
+      if (value <= t3) {
         return 4.0;
       }
       return 6.5;
@@ -352,8 +357,8 @@ export default function applyCityLayout(application) {
 
 
     function insertFittingSegment(rootSegment, toFitWidth, toFitHeight) {
-      if (!rootSegment.used && toFitWidth <= rootSegment.width &&
-        toFitHeight <= rootSegment.height) {
+      if (!rootSegment.used && toFitWidth <= rootSegment.width
+        && toFitHeight <= rootSegment.height) {
         const resultSegment = createLayoutSegment();
         rootSegment.upperRightChild = createLayoutSegment();
         rootSegment.lowerChild = createLayoutSegment();
@@ -405,7 +410,8 @@ export default function applyCityLayout(application) {
 
       if (resultFromUpper == null) {
         return resultFromLower;
-      } else if (resultFromLower == null) {
+      }
+      if (resultFromLower == null) {
         return resultFromUpper;
       }
       // choose best fitting square
@@ -447,17 +453,16 @@ export default function applyCityLayout(application) {
 
 
   function createLayoutSegment() {
-    const layoutSegment =
-      {
-        parent: null,
-        lowerChild: null,
-        upperRightChild: null,
-        startX: null,
-        startZ: null,
-        width: null,
-        height: null,
-        used: false
-      };
+    const layoutSegment = {
+      parent: null,
+      lowerChild: null,
+      upperRightChild: null,
+      startX: null,
+      startZ: null,
+      width: null,
+      height: null,
+      used: false
+    };
 
     return layoutSegment;
   } // END createLayoutSegment
@@ -572,12 +577,11 @@ export default function applyCityLayout(application) {
   function layoutCumulatedCommunication(commu, foundation) {
     const externalPortsExtension = new THREE.Vector3(3.0, 3.5, 3.0);
 
-    const centerCommuIcon =
-      new THREE.Vector3(
-        foundation.get('positionX') + (foundation.get('extension').x * 2.0) + (externalPortsExtension.x * 4.0),
-        (foundation.get('positionY') - foundation.get('extension').y) + externalPortsExtension.y,
-        ((foundation.get('positionZ') + (foundation.get('extension').z * 2.0)) - externalPortsExtension.z) - 12.0
-      );
+    const centerCommuIcon = new THREE.Vector3(
+      foundation.get('positionX') + (foundation.get('extension').x * 2.0) + (externalPortsExtension.x * 4.0),
+      (foundation.get('positionY') - foundation.get('extension').y) + externalPortsExtension.y,
+      ((foundation.get('positionZ') + (foundation.get('extension').z * 2.0)) - externalPortsExtension.z) - 12.0
+    );
 
     layoutInAndOutCommunication(commu, commu.get('sourceClazz'), centerCommuIcon);
   }
@@ -589,12 +593,11 @@ export default function applyCityLayout(application) {
     if (internalClazz !== null) {
       const end = new THREE.Vector3();
 
-      const centerPoint =
-        new THREE.Vector3(
-          internalClazz.get('positionX') + (internalClazz.get('width') / 2.0),
-          internalClazz.get('positionY') + (internalClazz.get('height') / 2.0),
-          internalClazz.get('positionZ') + (internalClazz.get('depth') / 2.0)
-        );
+      const centerPoint = new THREE.Vector3(
+        internalClazz.get('positionX') + (internalClazz.get('width') / 2.0),
+        internalClazz.get('positionY') + (internalClazz.get('height') / 2.0),
+        internalClazz.get('positionZ') + (internalClazz.get('depth') / 2.0)
+      );
 
       end.x = internalClazz.get('positionX') + (internalClazz.get('width') / 2.0);
       end.y = centerPoint.y;

@@ -204,8 +204,8 @@ export default function applyKlayLayout(landscape) {
 
     const minWidth = Math.max(
       DEFAULT_WIDTH * CONVERT_TO_KIELER_FACTOR,
-      (calculateRequiredLabelLength(getDisplayName(parent, node), NODE_LABEL_HEIGHT) +
-      (PADDING * 2.0)) * CONVERT_TO_KIELER_FACTOR
+      (calculateRequiredLabelLength(getDisplayName(parent, node), NODE_LABEL_HEIGHT)
+        + (PADDING * 2.0)) * CONVERT_TO_KIELER_FACTOR
     );
 
     const minHeight = DEFAULT_HEIGHT * CONVERT_TO_KIELER_FACTOR;
@@ -232,9 +232,9 @@ export default function applyKlayLayout(landscape) {
 
       const width = Math.max(
         DEFAULT_WIDTH * CONVERT_TO_KIELER_FACTOR,
-        (calculateRequiredLabelLength(application.get('name'), APPLICATION_LABEL_HEIGHT) +
-          APPLICATION_PIC_PADDING_SIZE + APPLICATION_PIC_SIZE +
-          (PADDING * 3.0)) * CONVERT_TO_KIELER_FACTOR
+        (calculateRequiredLabelLength(application.get('name'), APPLICATION_LABEL_HEIGHT)
+          + APPLICATION_PIC_PADDING_SIZE + APPLICATION_PIC_SIZE
+          + (PADDING * 3.0)) * CONVERT_TO_KIELER_FACTOR
       );
 
       const height = DEFAULT_HEIGHT * CONVERT_TO_KIELER_FACTOR;
@@ -266,13 +266,13 @@ export default function applyKlayLayout(landscape) {
       // console.log("edge: " + appSource.get('name') + " -> " + appTarget.get('name'));
 
       if (!appTarget.get('parent').get('visible')) {
-        appTarget = (appTarget.get('parent').get('parent').get('parent').get('opened')) ?
-          seekRepresentativeApplication(appTarget) : appTarget.get('parent').get('parent').get('parent');
+        appTarget = (appTarget.get('parent').get('parent').get('parent').get('opened'))
+          ? seekRepresentativeApplication(appTarget) : appTarget.get('parent').get('parent').get('parent');
       }
 
       if (!appSource.get('parent').get('visible')) {
-        appSource = (appSource.get('parent').get('parent').get('parent').get('opened')) ?
-          seekRepresentativeApplication(appSource) : appSource.get('parent').get('parent').get('parent');
+        appSource = (appSource.get('parent').get('parent').get('parent').get('opened'))
+          ? seekRepresentativeApplication(appSource) : appSource.get('parent').get('parent').get('parent');
       }
 
       if (appSource.get('id') !== appTarget.get('id')) {

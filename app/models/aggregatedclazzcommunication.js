@@ -29,4 +29,3 @@ export default DrawEdgeEntity.extend({
   }),
 
 });
-

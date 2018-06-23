@@ -104,8 +104,7 @@ export default Object.extend({
 
       const nodegroupstate = emberModel.get('parent.opened');
 
-      if (labelMesh && labelMesh.mesh &&
-        labelMesh.nodegroupopenstate === nodegroupstate) {
+      if (labelMesh && labelMesh.mesh && labelMesh.nodegroupopenstate === nodegroupstate) {
         // update meta-info for model
         labelMesh.mesh.userData.model = emberModel;
         threejsModel.label = labelMesh.mesh;
@@ -194,8 +193,7 @@ export default Object.extend({
     labelMesh.geometry.computeBoundingBox();
     const labelBoundingBox = labelMesh.geometry.boundingBox;
 
-    const labelLength = Math.abs(labelBoundingBox.max.x) -
-      Math.abs(labelBoundingBox.min.x);
+    const labelLength = Math.abs(labelBoundingBox.max.x) - Math.abs(labelBoundingBox.min.x);
 
     const yOffset = 0.6;
 
@@ -214,8 +212,7 @@ export default Object.extend({
     labelMesh.geometry.computeBoundingBox();
     const labelBoundingBox = labelMesh.geometry.boundingBox;
 
-    const labelLength = Math.abs(labelBoundingBox.max.x) -
-      Math.abs(labelBoundingBox.min.x);
+    const labelLength = Math.abs(labelBoundingBox.max.x) - Math.abs(labelBoundingBox.min.x);
 
     const yOffset = 0.2;
 
@@ -234,8 +231,7 @@ export default Object.extend({
     labelMesh.geometry.computeBoundingBox();
     const labelBoundingBox = labelMesh.geometry.boundingBox;
 
-    const labelHeight = Math.abs(labelBoundingBox.max.y) -
-      Math.abs(labelBoundingBox.min.y);
+    const labelHeight = Math.abs(labelBoundingBox.max.y) - Math.abs(labelBoundingBox.min.y);
 
     const xOffset = 0.1;
 
@@ -247,10 +243,8 @@ export default Object.extend({
 
   isLabelAlreadyCreated(emberModel) {
     // label already created and color didn't change?
-    if (this.get('textLabels')[emberModel.get('id')] &&
-      !this.get('configuration.landscapeColors.textchanged')) {
-      const oldTextLabelObj =
-        this.get('textLabels')[emberModel.get('id')];
+    if (this.get('textLabels')[emberModel.get('id')] && !this.get('configuration.landscapeColors.textchanged')) {
+      const oldTextLabelObj = this.get('textLabels')[emberModel.get('id')];
 
       return oldTextLabelObj;
     }
