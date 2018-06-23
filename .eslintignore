@@ -1,1 +1,12 @@
-/tests/**
+/tests
+/vendor
+/dist
+/tmp
+/node_modules
+/server
+/docs
+.DS_Store
+
+ember-cli-build.js
+testem.js
+yuidoc-packages.js
