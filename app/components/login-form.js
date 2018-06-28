@@ -55,10 +55,6 @@ export default Component.extend({
         userRecord.set('username', identification);
         userRecord.set('password', password);
         self.get('session').authenticate('authenticator:authenticator', userRecord).then(undefined, failure);
-
-        if (!self.get('socket')) {
-            self.set('socket', WebSocket.create());
-         }
       }
 
       function failure(reason) {

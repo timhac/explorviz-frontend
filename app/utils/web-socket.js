@@ -23,7 +23,7 @@ export default Object.extend({
       will create a new one for us.
     */
     const socket = this.websockets.socketFor('ws://localhost:7000/');
-    socket.send('Test message');
+    //socket.send('Test message');
 
     console.log('Socket is now running');
 
@@ -33,11 +33,11 @@ export default Object.extend({
       function, and the context in which to invoke the callback. All 3 arguments
       are required.
     */
-    socket.on('open', this.myOpenHandler, this);
-    socket.on('message', this.myMessageHandler, this);
-    socket.on('close', this.myCloseHandler, this);
+    //socket.on('open', this.myOpenHandler, this);
+    //socket.on('message', this.myMessageHandler, this);
+    //socket.on('close', this.myCloseHandler, this);
 
-    this.set('socketRef', socket);
+    //this.set('socketRef', socket);
   },
 
   willDestroyElement() {
