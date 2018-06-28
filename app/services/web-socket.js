@@ -15,6 +15,8 @@ export default Service.extend({
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
     socket.on('close', this.myCloseHandler, this);
+
+    this.set('socketRef', socket);
   },
 
   willDestroyElement() {

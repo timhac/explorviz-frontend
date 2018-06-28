@@ -52,6 +52,7 @@ export default Component.extend({
         userRecord.set('username', identification);
         userRecord.set('password', password);
         self.get('session').authenticate('authenticator:authenticator', userRecord).then(undefined, failure);
+
       }
 
       function failure(reason) {
@@ -69,7 +70,7 @@ export default Component.extend({
             ${backendResponse.detail}`;
 
         }
-        self.get('socket').myMessageHandler("test");
+        self.get('socket').myOpenHandler("test");
         self.set('session.session.messages.errorMessage', errorMessage);
 
       }
