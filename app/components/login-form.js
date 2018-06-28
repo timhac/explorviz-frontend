@@ -1,6 +1,9 @@
 import { inject as service } from "@ember/service";
 import Component from '@ember/component';
 
+import WebSocket from
+ 'explorviz-frontend/utils/web-socket';
+
 /**
 * TODO
 * 
@@ -15,6 +18,7 @@ export default Component.extend({
   session: service('session'),
   router: service('-routing'),
   store: service(),
+  socket: null,
 
   actions: {
 
@@ -51,6 +55,10 @@ export default Component.extend({
         userRecord.set('username', identification);
         userRecord.set('password', password);
         self.get('session').authenticate('authenticator:authenticator', userRecord).then(undefined, failure);
+
+        if (!self.get('socket')) {
+            self.set('socket', WebSocket.create());
+         }
       }
 
       function failure(reason) {
