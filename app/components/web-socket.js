@@ -1,20 +1,24 @@
-import Service, { inject as service } from '@ember/service';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 
-export default Service.extend({
+export default Component.extend({
 
-  websockets: service('websockets'),
+  //inject websocket
+  websockets: service(),
   socketRef: null,
 
-  init() {
+  didInsertElement() {
     this._super(...arguments);
-    console.log("bla");
-    const socket = this.websockets.socketFor('ws://localhost:4444');
 
-    console.log('Socket is now running');
+    //create websocket
+    const socket = this.websockets.socketFor('ws://localhost:4444/');
 
+    //define event handlers
     socket.on('open', this.myOpenHandler, this);
     socket.on('message', this.myMessageHandler, this);
     socket.on('close', this.myCloseHandler, this);
+
+    this.set('socketRef', socket);
   },
 
   willDestroyElement() {
@@ -22,9 +26,7 @@ export default Service.extend({
 
     const socket = this.socketRef;
 
-    /*
-      4. The final step is to remove all of the listeners you have setup.
-    */
+    //remove listeners
     socket.off('open', this.myOpenHandler);
     socket.off('message', this.myMessageHandler);
     socket.off('close', this.myCloseHandler);
@@ -32,7 +34,6 @@ export default Service.extend({
 
   myOpenHandler(event) {
     console.log(`On open event has been called: ${event}`);
-    this.get('socketRef').send('asd');
   },
 
   myMessageHandler(event) {
@@ -48,5 +49,4 @@ export default Service.extend({
       this.socketRef.send('Hello Websocket World');
     }
   }
-
 });

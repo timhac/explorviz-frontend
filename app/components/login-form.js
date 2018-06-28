@@ -52,7 +52,6 @@ export default Component.extend({
         userRecord.set('username', identification);
         userRecord.set('password', password);
         self.get('session').authenticate('authenticator:authenticator', userRecord).then(undefined, failure);
-
       }
 
       function failure(reason) {
