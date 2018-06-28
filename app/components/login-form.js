@@ -70,7 +70,7 @@ export default Component.extend({
             ${backendResponse.detail}`;
 
         }
-        self.get('socket').myOpenHandler("test");
+        self.get('socket').connect();
         self.set('session.session.messages.errorMessage', errorMessage);
 
       }
